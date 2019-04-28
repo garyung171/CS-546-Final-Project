@@ -1,0 +1,24 @@
+{
+  "name": "cs546-final-project",
+  "version": "1.0.0",
+  "description": "A webapp for people who want to play games find other people who want to play games",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/imgomez0127/CS-546-Final-Project.git"
+  },
+  "author": "Ian Gomez, Daniel Shapiro, Gary Ung",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/imgomez0127/CS-546-Final-Project/issues"
+  },
+  "homepage": "https://github.com/imgomez0127/CS-546-Final-Project#readme",
+  "dependencies": {
+    "express": "^4.16.4",
+    "express-nunjucks": "^2.2.3",
+    "mongodb": "^3.2.3"
+  }
+}
