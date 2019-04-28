@@ -1,4 +1,4 @@
-const dbConnection = require("./mongoConnection");
+const dbConnection = require("./establishConnection");
 
 const getCollectionFn = collection => {
     let requestedCollection = undefined;
@@ -12,6 +12,6 @@ const getCollectionFn = collection => {
 };
 
 module.exports = {
-    users : getCollectionFn("users");
-    meetups : getCollectionFn("meetups");
+    users : getCollectionFn("users"),
+    meetups : getCollectionFn("meetups")
 }
