@@ -14,9 +14,26 @@ let getUserByUsername = async function(username){
     }
     const users = await usersCollection();
     const user = await users.find({"username":username}).
+    if(user === null){
+        return {empty:true};
+    }
     return user
 }
+
+let getUserById = async function(id){
+    if(typeof(id) === "string"){
+        id = ObjectID(id);
+    }
+    const users = await usersCollection();
+    const user = await users.find({"_id":id});
+    if(user === null){
+        return {empty:true};
+    }
+    return user;
+}
+
 module.exports = {
     getAllUsers,
-    getUserByUsername
+    getUserByUsername,
+    getUserById
 }
