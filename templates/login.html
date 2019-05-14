@@ -6,4 +6,8 @@
 
 	<button type="submit">Submit</button>
 </form>
+
+{% if loginError %}
+<p>Invalid username or password.<p>
+{% endif %}
 {% endblock %}
