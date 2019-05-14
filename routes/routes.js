@@ -45,6 +45,7 @@ router.post("/login",async (req,res)=>{
             let user = await userOperations.getUserByUsername(req.body.username); 
             await userOperations.addSessionToUser(user,req.session.id);
             req.session.loginError = false;
+            // Should the line below this just use "user"?
             res.redirect("/profile/"+currentUser["username"],{profileOwner:true});
             return;
         }
@@ -57,6 +58,20 @@ router.post("/login",async (req,res)=>{
     catch(e){
         console.log(e);
         res.sendStatus(500);
+    }
+});
+
+router.post("/signup", async(req, res) =>{
+    try{
+        let user = req.body.username;
+        let pass = req.body.password;
+        let loc = req.body.location;
+        let em = req.body.email;
+        await userOperations.createUser(user,pass,loc,em);
+        res.redirect("/profile/"+user);
+    }catch(e){
+        console.log(e);
+        res.status(500);
     }
 });
 module.exports = router

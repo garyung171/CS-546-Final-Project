@@ -55,10 +55,31 @@ let addSessionToUser = async function(user,sessionID){
         throw "Unable to modify user";
     }
 }
+
+let createUser = async function(user, pass, loc, em){
+    if(!user || !pass || !loc || !em){
+        throw "Necessary information missing.";
+    }else{
+        const users = await usersCollection();
+        let person = {
+            username: user,
+            password: pass,
+            location: loc,
+            email: em,
+            preferences: [],
+            validLoginSessions: []
+        }
+        const insertInfo = await users.insertOne(person);
+        if(insertInfo.insertedCount === 0){
+            throw "Unable to create user.";
+        }
+    }
+}
 module.exports = {
     getAllUsers,
     getUserByUsername,
     getUserById,
     getUserBySessionID,
-    addSessionToUser
+    addSessionToUser,
+    createUser
 }
