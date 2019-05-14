@@ -1,7 +1,7 @@
 const usersCollection = require("./getCollections").users
 const connection = require("./establishConnection");
-const ObjectID = require("mongodb").ObjectID
-
+const ObjectID = require("mongodb").ObjectID;
+const slugify = require("slugify");
 let getAllUsers = async function(){
     const users = await usersCollection();
     const allUsers = await users.find({}).toArray();
@@ -32,6 +32,18 @@ let getUserById = async function(id){
     return user;
 }
 
+let getUserByProfileAddress = async function(profileAddress){
+    if(typeof(profileAddress) != "string"){
+        throw new Error("The input profileAddress is not a string");
+    }
+    const users = await usersCollection();
+    const user = await users.findOne({"profileAddress":profileAddress});
+    if(user === null){
+        return {empty:true};
+    }
+    return user;
+}
+   
 let getUserBySessionID= async function(sessionID){
     if(!sessionID){
         throw "No SessionID inputted";
@@ -68,8 +80,10 @@ let createUser = async function(username, password, location, email){
         throw "Necessary information missing.";
     }else{
         const users = await usersCollection();
-        if(getUserByUsername(username)["empty"] == false){
-            return true;
+        const usernameInDatabase = await getUserByUsername(username)["empty"] == false;
+        const profileAddressInDatabase = await getUserByProfileAddress(slugify(username))["empty"] == false;
+        if(usernameInDatabase||profileAddressInDatabase){
+            return false;
         } 
         let person = {
             "username": username,
@@ -78,6 +92,7 @@ let createUser = async function(username, password, location, email){
             "email": email,
             "preferences": [],
             "validLoginSessions": []
+            "profileAddress":slugify(username);
         }
         const insertInfo = await users.insertOne(person);
         if(insertInfo.insertedCount === 0){
@@ -92,5 +107,6 @@ module.exports = {
     getUserById,
     getUserBySessionID,
     addSessionToUser,
+    getUserByProfileAddress,
     createUser
 }
