@@ -2,8 +2,9 @@ const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcrypt");
 const path = require("path");
-const saltRounds = 8;
+const slugify = require("slugify");
 const userOperations = require("../mongodbAPI/userOperations");
+const saltRounds = 8;
 
 let checkLoginValidity = async function(username,password){
     if(!username || !password){
@@ -21,7 +22,7 @@ router.get("/",async (req,res)=>{
         try{
             if(req.session.loggedIn){
                 let currentUser = await userOperations.getUserBySessionID(req.session.id);
-                res.redirect("/profile/"+currentUser["username"]);
+                res.redirect("/profile/"+slugify(currentUser["username"]));
                 return;
             }
             else{
@@ -42,10 +43,10 @@ router.post("/login",async (req,res)=>{
     try{
         let validLogin = await checkLoginValidity(req.body.username,req.body.password);
         if(validLogin){
-            let currentUser = await userOperations.getUserByUsername(req.body.username);
+            let user = await userOperations.getUserByUsername(req.body.username);
             await userOperations.addSessionToUser(user,req.session.id);
             req.session.loginError = false;
-            res.redirect("/profile/"+currentUser["username"]);
+            res.redirect("/profile/"+slugify(user["username"]));
             return;
         }
         else{
@@ -66,8 +67,12 @@ router.post("/signup", async(req, res) =>{
         let password = await bcrypt.hash(req.body.password, saltRounds);
         let location = req.body.location;
         let email = req.body.email;
-        await userOperations.createUser(username,password,location,email);
-        res.redirect("/profile/"+username);
+        let successfulCreation = await userOperations.createUser(username,password,location,email);
+        if(!successfulCreation){
+            res.redirect("/");
+            return;
+        }
+        res.redirect("/profile/"+slugify(username));
     }catch(e){
         console.log(e);
         res.status(500);

@@ -49,30 +49,41 @@ let addSessionToUser = async function(user,sessionID){
         throw "No user inputted";
     }
     const users = await usersCollection();
-    const newValidLoginSessions = user["validLoginSessions"].push(sessionID);
-    const modifiedUpdateInfo = await users.updateOne({"_id":user["_id"]},{$set:{"validLoginSessions":newValidLoginSessions}});
+    console.log(user);
+    user["validLoginSessions"].push(sessionID);
+    console.log(user["validLoginSessions"]);
+    const modifiedUpdateInfo = await users.updateOne({"_id":user["_id"]},
+    {$set:
+        {
+            "validLoginSessions":user["validLoginSessions"]
+        }
+    });
     if(modifiedUpdateInfo.modifiedCount === 0){
         throw "Unable to modify user";
     }
 }
 
-let createUser = async function(user, pass, loc, em){
-    if(!user || !pass || !loc || !em){
+let createUser = async function(username, password, location, email){
+    if(!username || !password || !location || !email){
         throw "Necessary information missing.";
     }else{
         const users = await usersCollection();
+        if(getUserByUsername(username)["empty"] == false){
+            return true;
+        } 
         let person = {
-            username: user,
-            password: pass,
-            location: loc,
-            email: em,
-            preferences: [],
-            validLoginSessions: []
+            "username": username,
+            "password": password,
+            "location": location,
+            "email": email,
+            "preferences": [],
+            "validLoginSessions": []
         }
         const insertInfo = await users.insertOne(person);
         if(insertInfo.insertedCount === 0){
             throw "Unable to create user.";
         }
+        return true;
     }
 }
 module.exports = {
