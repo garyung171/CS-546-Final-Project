@@ -91,8 +91,8 @@ let createUser = async function(username, password, location, email){
             "location": location,
             "email": email,
             "preferences": [],
-            "validLoginSessions": []
-            "profileAddress":slugify(username);
+            "validLoginSessions": [],
+            "profileAddress":slugify(username)
         }
         const insertInfo = await users.insertOne(person);
         if(insertInfo.insertedCount === 0){
