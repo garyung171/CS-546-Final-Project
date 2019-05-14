@@ -13,11 +13,11 @@ let getUserByUsername = async function(username){
         throw new Error("The input username is not a string");
     }
     const users = await usersCollection();
-    const user = await users.find({"username":username}).
+    const user = await users.find({"username":username});
     if(user === null){
         return {empty:true};
     }
-    return user
+    return user;
 }
 
 let getUserById = async function(id){
