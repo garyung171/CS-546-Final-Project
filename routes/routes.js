@@ -19,7 +19,7 @@ let checkLoginValidity = async function(username,password){
 
 router.get("/",async (req,res)=>{
         try{
-            if(req.session.loggedIn){   
+            if(req.session.loggedIn){
                 let currentUser = await userOperations.getUserBySessionID(req.session.id);
                 res.redirect("/profile/"+currentUser["username"]);
                 return;
@@ -42,7 +42,7 @@ router.post("/login",async (req,res)=>{
     try{
         let validLogin = await checkLoginValidity(req.body.username,req.body.password);
         if(validLogin){
-            let currentUser = await userOperations.getUserByUsername(req.body.username); 
+            let currentUser = await userOperations.getUserByUsername(req.body.username);
             await userOperations.addSessionToUser(user,req.session.id);
             req.session.loginError = false;
             res.redirect("/profile/"+currentUser["username"]);
@@ -66,8 +66,8 @@ router.post("/signup", async(req, res) =>{
         let password = await bcrypt.hash(req.body.password, saltRounds);
         let location = req.body.location;
         let email = req.body.email;
-        await userOperations.createUser(username,pass,loc,em);
-        res.redirect("/profile/"+user);
+        await userOperations.createUser(username,password,location,email);
+        res.redirect("/profile/"+username);
     }catch(e){
         console.log(e);
         res.status(500);
