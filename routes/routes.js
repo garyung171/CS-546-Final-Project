@@ -9,18 +9,18 @@ let checkLoginValidity = async function(username,password){
     if(!username || !password){
         return false;
     }
-    let user = await userOperations.getUserByUsername(req.body.username);
+    let user = await userOperations.getUserByUsername(username);
     if(!user["empty"]){
-        let validPassword = await bcrypt.compare(req.body.password,user["password"]);
+        let validPassword = await bcrypt.compare(password,user["password"]);
         return validPassword
     }
     return false;
 }
 
-router.get("/",(req,res)=>{
+router.get("/",async (req,res)=>{
         try{
             if(req.session.loggedIn){   
-                currentUser = userOperations.getUserBySessionID(req.session.id);
+                currentUser = await userOperations.getUserBySessionID(req.session.id);
                 res.redirect("/profile/"+currentUser["username"],{profileOwner:true});
                 return;
             }
@@ -40,17 +40,17 @@ router.get("/",(req,res)=>{
 
 router.post("/login",async (req,res)=>{
     try{
-        validLogin = checkLoginValidity(req.session.username,req.session.password);
+        validLogin = await checkLoginValidity(req.body.username,req.body.password);
         if(validLogin){
-            let user = await userOperations.getUserByUsername(req.session.username); 
-            await userOperations.addSessionToUser(user["_id"],req.session.id);
+            let user = await userOperations.getUserByUsername(req.body.username); 
+            await userOperations.addSessionToUser(user,req.session.id);
             req.session.loginError = false;
             res.redirect("/profile/"+currentUser["username"],{profileOwner:true});
             return;
         }
         else{
             req.session.loginError = true;
-            res.redirect(401,"/");
+            res.redirect("/");
             return;
         }
     }

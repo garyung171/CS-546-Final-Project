@@ -1,9 +1,7 @@
 const express = require("express");
-
+const routes = require("./routes");
 const routeExtender = app => {
-    app.get("/",(req,res)=>{
-        res.render('index',{title:"Testing"});
-    });
+    app.use("/",routes);
     app.use("*",function(req,res){
         res.sendStatus(404);
     });

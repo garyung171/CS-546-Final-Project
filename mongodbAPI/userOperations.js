@@ -13,7 +13,7 @@ let getUserByUsername = async function(username){
         throw new Error("The input username is not a string");
     }
     const users = await usersCollection();
-    const user = await users.find({"username":username});
+    const user = await users.findOne({"username":username});
     if(user === null){
         return {empty:true};
     }
@@ -32,8 +32,33 @@ let getUserById = async function(id){
     return user;
 }
 
+let getUserBySessionID= async function(sessionID){
+    if(!sessionID){
+        throw "No SessionID inputted";
+    }
+    let users = await usersCollection();
+    let user = await users.findOne({"validLoginSessions":sessionID});
+    if(user === null){
+        return {empty:true};
+    }
+    return user;
+}
+    
+let addSessionToUser = async function(user,sessionID){
+    if(!user || !sessionID){
+        throw "No user inputted";
+    }
+    const users = await usersCollection();
+    const newValidLoginSessions = user["validLoginSessions"].push(sessionID);
+    const modifiedUpdateInfo = await users.updateOne({"_id":user["_id"]},{$set:{"validLoginSessions":newValidLoginSessions}});
+    if(modifiedUpdateInfo.modifiedCount === 0){
+        throw "Unable to modify user";
+    }
+}
 module.exports = {
     getAllUsers,
     getUserByUsername,
-    getUserById
+    getUserById,
+    getUserBySessionID,
+    addSessionToUser
 }
