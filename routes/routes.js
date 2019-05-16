@@ -19,34 +19,34 @@ let checkLoginValidity = async function(username,password){
 }
 
 router.get("/",async (req,res)=>{
-        try{
-            if(req.session.loggedIn){
-                let currentUser = await userOperations.getUserBySessionID(req.session.id);
-                res.redirect("/profile/"+slugify(currentUser["username"]));
-                return;
-            }
-            else{
-                res.render("login",{
-                    title:"Login",
-                    loginError:(req.session.loginError) ? true : false
-                });
-                return;
-            }
+    try{
+        if(req.session.loggedIn){
+            let currentUser = await userOperations.getUserBySessionID(req.session.id);
+            res.redirect("/profile/"+slugify(currentUser["username"]));
+            return;
         }
-        catch(e){
-            console.log(e);
-            res.sendStatus(500);
+        else{
+            res.render("login",{
+                title:"Login",
+                loginError:(req.session.loginError) ? true : false
+            });
+            return;
         }
+    }
+    catch(e){
+        console.log(e);
+        res.sendStatus(500);
+    }
 });
 
 router.post("/login",async (req,res)=>{
     try{
         let validLogin = await checkLoginValidity(req.body.username,req.body.password);
         if(validLogin){
-            let user = await userOperations.getUserByUsername(req.body.username);
-            await userOperations.addSessionToUser(user,req.session.id);
+            let currentUser = await userOperations.getUserByUsername(req.body.username);
+            await userOperations.addSessionToUser(currentUser,req.session.id);
             req.session.loginError = false;
-            res.redirect("/profile/"+slugify(user["username"]));
+            res.redirect("/profile/"+slugify(currentUser["username"]));
             return;
         }
         else{
@@ -78,4 +78,19 @@ router.post("/signup", async(req, res) =>{
         res.status(500);
     }
 });
+
+router.get("/profile/:username", async(req, res) => {
+    try{
+        let currentUser = await userOperations.getUserByUsername(req.params.username);
+        res.render("profile",{
+            title: "Profile",
+            user: currentUser
+        });
+        return;
+    }catch(e){
+        console.log(e);
+        res.status(500);
+    }
+});
+
 module.exports = router;
