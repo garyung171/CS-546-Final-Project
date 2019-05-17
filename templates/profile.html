@@ -1,11 +1,15 @@
 {% extends "base.html" %}
 {% block body %}
-<p>Username: {{username}}</p>
-<p>Location: {{location}}</p>
-<p>Email: {{email}}</p>
-{% if profileOwned %}
-<a href="/edit-profile/{{profileAddress}}">
-    <button type="button" class="btn btn-dark"> Edit Profile </button>
-</a>
-{% endif %}
+<div id="body-box">
+    <div class="profile-container">
+    <p>Username: {{username}}</p>
+    <p>Location: {{location}}</p>
+    <p>Email: {{email}}</p>
+    {% if profileOwned %}
+    <a href="/edit-profile/{{profileAddress}}">
+        <button type="button" class="btn btn-dark"> Edit Profile </button>
+    </a>
+    {% endif %}
+    </div>
+</div>
 {% endblock %}

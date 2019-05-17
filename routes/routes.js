@@ -97,7 +97,8 @@ router.get("/profile/:username", async(req, res) => {
             location: currentUser.location,
             email: currentUser.email,
             profileOwned:profileOwned,
-            profileAddress:currentUser["profileAddress"]
+            profileAddress:currentUser["profileAddress"],
+            loggedIn:req.session.loggedIn
         });
         return;
     }catch(e){
