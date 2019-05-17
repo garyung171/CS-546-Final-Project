@@ -95,4 +95,44 @@ router.get("/profile/:username", async(req, res) => {
     }
 });
 
+router.post("/logout", async(req, res) => {
+    try{
+        let currentUser = await userOperations.getUserBySessionID(req.session.id);
+        let sessions = currentUser.validLoginSessions;
+        for(let i = 0; i < sessions.length; i++){
+            if(sessions[i] == req.session.id){
+                sessions.splice(i, 1);
+            }
+        }
+        await userOperations.updateSessions(currentUser.username, array);
+        // Redirect to a logout page or somewhere else?
+        res.redirect("/");
+        return;
+    }catch(e){
+        console.log(e);
+        res.status(500);
+    }
+});
+
+router.get("/updatePage", async (req, res) => {
+    try{
+        let currentUser = await userOperations.getUserBySessionID(req.session.id);
+        // render the update view with the currentUser values
+    }catch(e){
+        console.log(e);
+        res.status(500);
+    }
+});
+
+router.post("/updatePage", async(req, res) => {
+    try{
+        let currentUser = await userOperations.getUserBySessionID(req.session.id);
+        let newLocation = req.body.newLocation;
+        let newUserName = req.body.newUserName;
+        let newPassword = req.body.newPassword;
+        // how to update the preferences? allow to change all?
+        //same with how to update all the fields
+    }
+});
+
 module.exports = router;

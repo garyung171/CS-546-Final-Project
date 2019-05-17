@@ -101,6 +101,17 @@ let createUser = async function(username, password, location, email){
         return true;
     }
 }
+
+let updateSessions = async function(username, array){
+    const users = await usersCollection();
+    const modifiedUpdateInfo = await users.updateOne({"username": username}, 
+    {set:
+        { "validLoginSessions" : array}
+    });
+    if(modifiedUpdateInfo.modifiedCount === 0){
+        console.log("Could not update user.");
+    }
+}
 module.exports = {
     getAllUsers,
     getUserByUsername,
@@ -108,5 +119,6 @@ module.exports = {
     getUserBySessionID,
     addSessionToUser,
     getUserByProfileAddress,
-    createUser
+    createUser,
+    updateSessions
 }
