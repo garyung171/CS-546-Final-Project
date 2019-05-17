@@ -75,7 +75,7 @@ router.post("/signup", async(req, res) =>{
         res.redirect("/profile/"+slugify(username));
     }catch(e){
         console.log(e);
-        res.status(500);
+        res.sendStatus(500);
     }
 });
 
@@ -91,7 +91,7 @@ router.get("/profile/:username", async(req, res) => {
         return;
     }catch(e){
         console.log(e);
-        res.status(500);
+        res.sendStatus(500);
     }
 });
 
@@ -110,7 +110,7 @@ router.post("/logout", async(req, res) => {
         return;
     }catch(e){
         console.log(e);
-        res.status(500);
+        res.sendStatus(500);
     }
 });
 
@@ -120,7 +120,7 @@ router.get("/updatePage", async (req, res) => {
         // render the update view with the currentUser values
     }catch(e){
         console.log(e);
-        res.status(500);
+        res.sendStatus(500);
     }
 });
 
@@ -134,7 +134,7 @@ router.post("/updatePage", async(req, res) => {
         //same with how to update all the fields
     }catch(e){
         cosole.log(e);
-        res.status(500);
+        res.sendStatus(500);
     }
 });
 
