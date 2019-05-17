@@ -4,7 +4,6 @@ const bcrypt = require("bcrypt");
 const path = require("path");
 const slugify = require("slugify");
 const userOperations = require("../mongodbAPI/userOperations");
-const meetingsOperation = require("../mongodbAPI/meetingsOperations");
 const saltRounds = 8;
 
 let checkLoginValidity = async function(username,password){
@@ -99,9 +98,10 @@ router.get("/profile/:username", async(req, res) => {
             email: currentUser.email,
             profileOwned:profileOwned,
             profileAddress:currentUser["profileAddress"],
-            prefrences:currentUser.prefrences,
+            preferences:currentUser.preferences,
             loggedIn:req.session.loggedIn,
             userProfile: currentUser["username"] 
+
         });
         return;
     }catch(e){
@@ -236,6 +236,7 @@ router.post("/updatePreferences", async (req, res) => {
         }else{
             let currentUser = await userOperations.getUserBySessionID(req.session.id);
             let preferences = req.body.preferences;
+            console.log(preferences);
             let update = await userOperations.updatePreferences(currentUser.username, preferences);
             if(update){
                 // Ajax
@@ -280,4 +281,5 @@ router.post("/create-meeting", async (req,res) =>{
     }
 });
     
+
 module.exports = router;

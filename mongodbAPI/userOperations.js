@@ -162,14 +162,26 @@ let updateEmail = async function(username, newEmail){
 
 let updatePreferences = async function(username, prefArray){
     const users = await usersCollection();
-    const modifiedUpdateInfo = await users.updateOne({"username" : username}, 
-    {$set : 
-        {"preferences" : prefArray}
-    });
-    if(modifiedUpdateInfo.modifiedCount === 0){
-        throw "Could not update user.";
+    if(Array.isArray(prefArray)){
+        const modifiedUpdateInfo = await users.updateOne({"username" : username}, 
+        {$set : 
+            {"preferences" : prefArray}
+        });
+        if(modifiedUpdateInfo.modifiedCount === 0){
+            throw "Could not update user.";
+        }
+        return true;
+    }else{
+        const modifiedUpdateInfo = await users.updateOne({"username" : username}, 
+        {$set : 
+            {"preferences" : [prefArray]}
+        });
+        if(modifiedUpdateInfo.modifiedCount === 0){
+            throw "Could not update user.";
+        }
+        return true;
     }
-    return true;
+    
 }
 
 module.exports = {

@@ -4,7 +4,7 @@ const ObjectID = require("mongodb").ObjectID;
 const slugify = require("slugify");
 
 let createMeeting = async function(meetupName,owner,date,location){
-    if(!meetupName || !owner || !date || !location){
+    if(!meetingsCollection || !owner || !date || !location){
         return false;
     }
     else{
@@ -24,24 +24,11 @@ let createMeeting = async function(meetupName,owner,date,location){
                     } 
         const insertInfo = await meetings.insertOne(meeting);
         if(insertInfo.insertedCount === 0){
-            throw "Unable to create meeting."
+            throw "Unable to create user."
         }
-        return insertInfo.insertedId;
+        return true;
     }
 } 
-
-let getMeetingByName = async function(meetupName){
-    if(!meetupName){
-        return false;
-    }else{
-        const meetings = await meetingsCollection();
-        const found = await meetings.findOne({"meetupName" : meetupName});
-        if(found === null){
-            return {"empty" : true};
-        }
-        return found;
-    }
-}
 
 let getMeetingByOwnerId = async function(ownerId){
     if(!ownerId){
@@ -100,7 +87,7 @@ let getFutureMeetings = async function(date){
         return false;
     }else{
         const meetings = await meetingsCollection();
-        let found = await meetings.find({"date" : {$gt : date}}).sort({date : -1});
+        let found = await meetings.find({"date" : {$gt : date}});
         if(found === null){
             return {"empty" : true};
         }
@@ -113,7 +100,7 @@ let getPreviousMeetings = async function(date){
         return false;
     }else{
         const meetings = await meetingsCollection();
-        let found = await meetings.find({"date" : {$lt : date}}).sort({date : -1});
+        let found = await meetings.find({"date" : {$lt : date}});
         if(found === null){
             return {"empty" : true};
         }
