@@ -15,7 +15,7 @@
     	<button class="btn btn-primary" type="submit">Log In</button>
     </form>
     {% if loginError %}
-    <p>Invalid username or password.<p>
+    <p class="alert alert-danger">Invalid username or password.<p>
     {% endif %}
 </div>
 
@@ -41,7 +41,7 @@
         <button type="submit" class="btn btn-primary">Sign Up</button>
     </form>
     {% if signupError %}
-    <p>Username is taken.</p>
+    <p class="alert alert-danger">Either the Username is taken or you did not input all the information</p>
     {% endif %}
     </div>
 </div>

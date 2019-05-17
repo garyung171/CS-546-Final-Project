@@ -75,7 +75,7 @@ let addSessionToUser = async function(user,sessionID){
 
 let createUser = async function(username, password, location, email){
     if(!username || !password || !location || !email){
-        throw "Necessary information missing.";
+        return false;
     }else{
         const users = await usersCollection();
         const usernameInDatabase = await getUserByUsername(username)["empty"] == false;

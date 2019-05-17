@@ -28,7 +28,8 @@ router.get("/",async (req,res)=>{
         else{
             res.render("login",{
                 title:"Login",
-                loginError:(req.session.loginError) ? true : false
+                loginError:(req.session.loginError) ? true : false,
+                signupError:(req.session.signupError)? true : false
             });
             return;
         }
@@ -41,11 +42,12 @@ router.get("/",async (req,res)=>{
 
 router.post("/login",async (req,res)=>{
     try{
+        req.session.loginError = false;
+        req.session.signupError = false;
         let validLogin = await checkLoginValidity(req.body.username,req.body.password);
         if(validLogin){
             let currentUser = await userOperations.getUserByUsername(req.body.username);
             await userOperations.addSessionToUser(currentUser,req.session.id);
-            req.session.loginError = false;
             req.session.loggedIn = true;
             res.redirect("/profile/"+slugify(currentUser["username"]));
             return;
@@ -64,12 +66,15 @@ router.post("/login",async (req,res)=>{
 
 router.post("/signup", async(req, res) =>{
     try{
+        req.session.loginError = false;
+        req.session.signupError = false;
         let username = req.body.username;
         let password = await bcrypt.hash(req.body.password, saltRounds);
         let location = req.body.location;
         let email = req.body.email;
         let successfulCreation = await userOperations.createUser(username,password,location,email);
         if(!successfulCreation){
+            req.session.signupError = true;
             res.redirect("/");
             return;
         }
@@ -173,15 +178,12 @@ router.get("/edit-profile/:profileAddress", async (req, res) => {
         if (currentUser.profileAddress != profileAddress) {
             res.sendStatus(403);
         }
-<<<<<<< HEAD
         res.render("edit-profile",{
             title: "Edit Profile"
         });
-=======
         res.render("edit-profile",
             {title: "Edit Profile"}
         );
->>>>>>> e8cf1de8f67ebe654580fe44fbcade6e7dcfb677
         return;
     }catch(e){
         console.log(e);
