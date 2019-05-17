@@ -112,7 +112,7 @@ router.get("/profile/:username", async(req, res) => {
 router.get("/edit-profile/:profileAddress", async (req, res) => {
     try{
         let currentUser = await userOperations.getUserBySessionID(req.session.id);
-        if (currentUser.profileAddress != profileAddress) {
+        if (currentUser.profileAddress != req.params.profileAddress) {
             res.sendStatus(403);
         }
         res.render("edit-profile",{
