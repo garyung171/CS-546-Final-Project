@@ -132,6 +132,9 @@ router.post("/updatePage", async(req, res) => {
         let newPassword = req.body.newPassword;
         // how to update the preferences? allow to change all?
         //same with how to update all the fields
+    }catch(e){
+        cosole.log(e);
+        res.status(500);
     }
 });
 

@@ -1,10 +1,13 @@
 const express = require("express");
 const app = express();
+const static = express.static(__dirname + "/public");
 const nunjucks = require("express-nunjucks");
 const configRoutes = require("./routes");
 const session = require("express-session");
 const bodyParser = require("body-parser");
 const devServer = app.get("env") === "development";
+
+app.use("/public",static);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());

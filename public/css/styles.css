@@ -1,0 +1,10 @@
+#loginPage-forms{
+    display:flex;
+    justify-content:space-around;
+}
+.container{
+    margin:5%;
+    padding:2%;
+    border:2px solid black;
+    border-radius:5px;
+}

@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block body %}
-
-<div class="container">
+<div id="loginPage-forms">
+    <div class="container">
     <h2>Login</h2>
     <form class="form-group" id="login-form" method="post" action="/login">
         <div class="form-group">
@@ -19,7 +19,7 @@
     {% endif %}
 </div>
 
-<div class="container">
+    <div class="container">
     <h2>Sign Up</h2>
     <form id="signup-form" method="post" action="/signup">
         <div class="form-group">
@@ -43,6 +43,6 @@
     {% if signupError %}
     <p>Username is taken.</p>
     {% endif %}
+    </div>
 </div>
-
 {% endblock %}
