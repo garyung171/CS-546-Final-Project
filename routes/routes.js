@@ -131,9 +131,9 @@ router.get("/edit-profile/:profileAddress", async (req, res) => {
         if (currentUser.profileAddress != profileAddress) {
             res.sendStatus(403);
         }
-        res.render("edit-profile",
+        res.render("edit-profile",{
             title: "Edit Profile"
-        );
+        });
         return;
     }catch(e){
         console.log(e);
