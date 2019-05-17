@@ -228,7 +228,6 @@ router.post("/updateEmail", async(req,res) => {
     }
 });
 
-<<<<<<< HEAD
 router.get("/create-meeting", async(req,res) =>{
     try{
         res.render("create_meeting",{createError:req.session.createError ? true : false});
@@ -238,7 +237,7 @@ router.get("/create-meeting", async(req,res) =>{
         res.sendStatus(500);
     }
 });
-=======
+
 router.post("/updatePreferences", async (req, res) => {
     try{
         if(req.body.preferences == ""){
@@ -256,7 +255,6 @@ router.post("/updatePreferences", async (req, res) => {
         res.sendStatus(500);
     }
 })
->>>>>>> c86984fc43e6e96c80acdc8e32c91858dea49d2e
 
 router.post("/create-meeting", async (req,res) =>{
     if(!req.body.meetupName || !req.body.owner || !req.body.date || !req.body.location){
