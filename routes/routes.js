@@ -46,6 +46,7 @@ router.post("/login",async (req,res)=>{
             let currentUser = await userOperations.getUserByUsername(req.body.username);
             await userOperations.addSessionToUser(currentUser,req.session.id);
             req.session.loginError = false;
+            req.session.loggedIn = true;
             res.redirect("/profile/"+slugify(currentUser["username"]));
             return;
         }
@@ -82,11 +83,16 @@ router.post("/signup", async(req, res) =>{
 router.get("/profile/:username", async(req, res) => {
     try{
         let currentUser = await userOperations.getUserByUsername(req.params.username);
+        let profileOwned = currentUser["validLoginSessions"].find(function(element){
+            return req.session.id === element;
+        }) != undefined;
         res.render("profile",{
             title: "Profile",
             username: currentUser.username,
             location: currentUser.location,
-            email: currentUser.email
+            email: currentUser.email,
+            profileOwned:profileOwned,
+            profileAddress:currentUser["profileAddress"]
         });
         return;
     }catch(e){
@@ -95,23 +101,29 @@ router.get("/profile/:username", async(req, res) => {
     }
 });
 
-router.post("/logout", async(req, res) => {
-    try{
-        let currentUser = await userOperations.getUserBySessionID(req.session.id);
-        let sessions = currentUser.validLoginSessions;
-        for(let i = 0; i < sessions.length; i++){
-            if(sessions[i] == req.session.id){
-                sessions.splice(i, 1);
+router.get("/logout", async(req, res) => {
+    if(!req.session.loggedIn){
+        res.redirect("/");
+    }
+    else{
+        try{
+            let currentUser = await userOperations.getUserBySessionID(req.session.id);
+            let sessions = currentUser.validLoginSessions;
+            for(let i = 0; i < sessions.length; i++){
+                if(sessions[i] == req.session.id){
+                    sessions.splice(i, 1);
+                }
             }
+            let update = await userOperations.updateSessions(currentUser.username, sessions);
+            if(update){
+                req.session.destroy();
+                res.redirect("/");
+                return;
+            }
+        }catch(e){
+            console.log(e);
+            res.sendStatus(500);
         }
-        let update = await userOperations.updateSessions(currentUser.username, array);
-        if(update){
-            res.redirect("/");
-            return;
-        }
-    }catch(e){
-        console.log(e);
-        res.sendStatus(500);
     }
 });
 

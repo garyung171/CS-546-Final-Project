@@ -3,4 +3,9 @@
 <p>Username: {{username}}</p>
 <p>Location: {{location}}</p>
 <p>Email: {{email}}</p>
+{% if profileOwned %}
+<a href="/edit-profile/{{profileAddress}}">
+    <button type="button" class="btn btn-dark"> Edit Profile </button>
+</a>
+{% endif %}
 {% endblock %}
