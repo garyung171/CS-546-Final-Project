@@ -148,7 +148,7 @@ let updateLocation = async function(username, newLocation){
     return true;
 }
 
-let updateLocation = async function(username, newEmail){
+let updateEmail = async function(username, newEmail){
     const users = await usersCollection();
     const modifiedUpdateInfo = await users.updateOne({"username": username},
     {$set:
