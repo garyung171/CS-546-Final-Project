@@ -120,10 +120,16 @@ router.post("/logout", async(req, res) => {
     }
 });
 
-router.get("/updatePage", async (req, res) => {
+router.get("/edit-profile/:profileAddress", async (req, res) => {
     try{
         let currentUser = await userOperations.getUserBySessionID(req.session.id);
-        // render the update view with the currentUser values
+        if (currentUser.profileAddress != profileAddress) {
+            res.sendStatus(403);
+        }
+        res.render("edit-profile",
+            title: "Edit Profile"
+        );
+        return;
     }catch(e){
         console.log(e);
         res.sendStatus(500);
