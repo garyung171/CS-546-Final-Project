@@ -148,7 +148,6 @@ let updateLocation = async function(username, newLocation){
     return true;
 }
 
-<<<<<<< HEAD
 let updateEmail = async function(username, newEmail){
     const users = await usersCollection();
     const modifiedUpdateInfo = await users.updateOne({"username": username},
@@ -161,8 +160,18 @@ let updateEmail = async function(username, newEmail){
     return true;
 }
 
-=======
->>>>>>> 0dae2ac1999b60210c0b97ced8e649ab94356f25
+let updatePreferences = async function(username, prefArray){
+    const users = usersCollection();
+    const modifiedUpdateInfo = await users.updateOne({"username" : username}, 
+    {$set : 
+        {"preferences" : prefArray}
+    });
+    if(modifiedUpdateInfo.modifiedCount === 0){
+        throw "Could not update user.";
+    }
+    return true;
+}
+
 module.exports = {
     getAllUsers,
     getUserByUsername,
@@ -175,5 +184,6 @@ module.exports = {
     updateUsername,
     updatePassword,
     updateLocation,
-    updateEmail
+    updateEmail,
+    updatePreferences
 }

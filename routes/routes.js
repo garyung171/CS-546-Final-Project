@@ -161,7 +161,7 @@ router.post("/updateName", async(req, res) => {
             if(usernameInDatabase||profileAddressInDatabase){
                 res.send("Username is taken.");
             }
-            let update = userOperations.updateUsername(currentUser.username, newName);
+            let update = await userOperations.updateUsername(currentUser.username, newName);
             if(update){
                 // Where are we directing after this?
             }
@@ -179,7 +179,7 @@ router.post("/updatePassword", async(req, res) =>{
         }else{
             let currentUser = await userOperations.getUserBySessionID(req.session.id);
             let newPassword = await bcrypt.hash(req.body.newPassword, saltRounds);
-            let update = userOperations.updatePassword(currentUser.username, newPassword);
+            let update = await userOperations.updatePassword(currentUser.username, newPassword);
             if(update){
                 // Where are we directing after this?
             }
@@ -197,7 +197,7 @@ router.post("/updateLocation", async(req, res) =>{
         }else{
             let currentUser = await userOperations.getUserBySessionID(req.session.id);
             let newLocation = req.body.newLocation;
-            let update = userOperations.updateLocation(currentUser.username, newLocation);
+            let update = await userOperations.updateLocation(currentUser.username, newLocation);
             if(update){
                 // Where are we directing after this?
             }
@@ -215,7 +215,7 @@ router.post("/updateEmail", async(req,res) => {
         }else{
             let currentUser = await userOperations.getUserBySessionID(req.session.id);
             let newEmail = req.body.newEmail;
-            let update = userOperations.updateEmail(currentUser.username, newEmail);
+            let update = await userOperations.updateEmail(currentUser.username, newEmail);
             if(update){
                 // Where are we directing after this?
             }
@@ -226,5 +226,22 @@ router.post("/updateEmail", async(req,res) => {
     }
 });
 
+router.post("/updatePreferences", async (req, res) => {
+    try{
+        if(req.body.preferences == ""){
+            res.send("Please select some preferences");
+        }else{
+            let currentUser = await userOperations.getUserBySessionID(req.session.id);
+            let preferences = req.body.preferences;
+            let update = await userOperations.updatePreferences(currentUser.username, preferences);
+            if(update){
+                // Ajax
+            }
+        }
+    }catch(e){
+        console.log(e);
+        res.sendStatus(500);
+    }
+})
 
 module.exports = router;
