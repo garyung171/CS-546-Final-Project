@@ -84,7 +84,9 @@ router.get("/profile/:username", async(req, res) => {
         let currentUser = await userOperations.getUserByUsername(req.params.username);
         res.render("profile",{
             title: "Profile",
-            user: currentUser
+            username: currentUser.username,
+            location: currentUser.location,
+            email: currentUser.email
         });
         return;
     }catch(e){

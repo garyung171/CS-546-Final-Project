@@ -1,22 +1,25 @@
 {% extends "base.html" %}
 {% block body %}
+
+<h1>Login</h1>
 <form id="login-form" method="post" action="/login">
 	<input type="text" name="username">
 	<input type="password" name="password">
 
-	<button type="submit">Submit</button>
+	<button type="submit">Log In</button>
 </form>
 
 {% if loginError %}
 <p>Invalid username or password.<p>
 {% endif %}
 
+<h1>Sign Up</h1>
 <form id="signup-form" method="post" action="/signup">
     <input type="text" name="username">
     <input type="password" name="password">
     <input type="text" name="location">
     <input type="email" name="email">
 
-    <button type="submit">Submit</button>
+    <button type="submit">Sign Up</button>
 </form>
 {% endblock %}
