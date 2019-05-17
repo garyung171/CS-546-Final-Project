@@ -148,6 +148,18 @@ let updateLocation = async function(username, newLocation){
     return true;
 }
 
+let updateLocation = async function(username, newEmail){
+    const users = await usersCollection();
+    const modifiedUpdateInfo = await users.updateOne({"username": username},
+    {$set:
+        {"email" : newEmail}
+    });
+    if(modifiedUpdateInfo.modifiedCount === 0){
+        throw "Could not update user.";
+    }
+    return true;
+}
+
 module.exports = {
     getAllUsers,
     getUserByUsername,
@@ -159,5 +171,6 @@ module.exports = {
     updateSessions,
     updateUsername,
     updatePassword,
-    updateLocation
+    updateLocation,
+    updateEmail
 }

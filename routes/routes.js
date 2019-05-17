@@ -106,6 +106,22 @@ router.get("/profile/:username", async(req, res) => {
     }
 });
 
+router.get("/edit-profile/:profileAddress", async (req, res) => {
+    try{
+        let currentUser = await userOperations.getUserBySessionID(req.session.id);
+        if (currentUser.profileAddress != profileAddress) {
+            res.sendStatus(403);
+        }
+        res.render("edit-profile",{
+            title: "Edit Profile"
+        });
+        return;
+    }catch(e){
+        console.log(e);
+        res.sendStatus(500);
+    }
+});
+
 router.get("/logout", async(req, res) => {
     if(!req.session.loggedIn){
         res.redirect("/");
@@ -143,7 +159,7 @@ router.post("/updateName", async(req, res) => {
             const profileAddressInDatabase = await userOpertaions.getUserByProfileAddress(slugify(currentUser.username))["empty"] == false;
             if(usernameInDatabase||profileAddressInDatabase){
                 res.send("Username is taken.");
-            } 
+            }
             let update = userOperations.updateUsername(currentUser.username, newName);
             if(update){
                 // Where are we directing after this?
@@ -172,24 +188,6 @@ router.post("/updatePassword", async(req, res) =>{
         res.sendStatus(500);
     }
 });
-router.get("/edit-profile/:profileAddress", async (req, res) => {
-    try{
-        let currentUser = await userOperations.getUserBySessionID(req.session.id);
-        if (currentUser.profileAddress != profileAddress) {
-            res.sendStatus(403);
-        }
-        res.render("edit-profile",{
-            title: "Edit Profile"
-        });
-        res.render("edit-profile",
-            {title: "Edit Profile"}
-        );
-        return;
-    }catch(e){
-        console.log(e);
-        res.sendStatus(500);
-    }
-});
 
 router.post("/updateLocation", async(req, res) =>{
     try{
@@ -199,6 +197,24 @@ router.post("/updateLocation", async(req, res) =>{
             let currentUser = await userOperations.getUserBySessionID(req.session.id);
             let newLocation = req.body.newLocation;
             let update = userOperations.updateLocation(currentUser.username, newLocation);
+            if(update){
+                // Where are we directing after this?
+            }
+        }
+    }catch(e){
+        console.log(e);
+        res.sendStatus(500);
+    }
+});
+
+router.post("/updateEmail", async(req,res) => {
+    try{
+        if(req.body.newEmail == ""){
+            res.send("Please enter a valid email.");
+        }else{
+            let currentUser = await userOperations.getUserBySessionID(req.session.id);
+            let newEmail = req.body.newEmail;
+            let update = userOperations.updateEmail(currentUser.username, newEmail);
             if(update){
                 // Where are we directing after this?
             }
