@@ -1,4 +1,10 @@
-#loginPage-forms{
+body{
+    font-family:'Raleway', sans-serif;
+}
+.navbar-brand{
+    font-family:'Roboto', sans-serif;
+}
+#body-box{
     display:flex;
     justify-content:space-around;
     flex-wrap:wrap;
@@ -10,8 +16,19 @@
     width:40%;
     border-radius:5px;
 }
+.profile-container{
+    margin:5%;
+    padding:2%;
+    border:2px solid black;
+    width:40%;
+    border-radius:5px;
+    height:500px;
+}
 @media only screen and (max-width: 700px) {
     .container{
         width:100%;
+    }
+    .profile-container{
+        height:400px;
     }
 }
