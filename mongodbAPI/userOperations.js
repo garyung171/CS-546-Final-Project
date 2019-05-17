@@ -161,7 +161,7 @@ let updateEmail = async function(username, newEmail){
 }
 
 let updatePreferences = async function(username, prefArray){
-    const users = usersCollection();
+    const users = await usersCollection();
     const modifiedUpdateInfo = await users.updateOne({"username" : username}, 
     {$set : 
         {"preferences" : prefArray}
