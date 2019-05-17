@@ -101,22 +101,27 @@ router.get("/profile/:username", async(req, res) => {
     }
 });
 
-router.post("/logout", async(req, res) => {
-    try{
-        let currentUser = await userOperations.getUserBySessionID(req.session.id);
-        let sessions = currentUser.validLoginSessions;
-        for(let i = 0; i < sessions.length; i++){
-            if(sessions[i] == req.session.id){
-                sessions.splice(i, 1);
-            }
-        }
-        await userOperations.updateSessions(currentUser.username, array);
-        // Redirect to a logout page or somewhere else?
+router.get("/logout", async(req, res) => {
+    if(!req.session.loggedIn){
         res.redirect("/");
-        return;
-    }catch(e){
-        console.log(e);
-        res.sendStatus(500);
+    }
+    else{
+        try{
+            let currentUser = await userOperations.getUserBySessionID(req.session.id);
+            let sessions = currentUser.validLoginSessions;
+            for(let i = 0; i < sessions.length; i++){
+                if(sessions[i] == req.session.id){
+                    sessions.splice(i, 1);
+                }
+            }
+            await userOperations.updateSessions(currentUser.username, sessions);
+            req.session.destroy();
+            res.redirect("/");
+            return;
+        }catch(e){
+            console.log(e);
+            res.sendStatus(500);
+        }
     }
 });
 

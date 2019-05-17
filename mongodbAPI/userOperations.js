@@ -103,7 +103,7 @@ let createUser = async function(username, password, location, email){
 let updateSessions = async function(username, array){
     const users = await usersCollection();
     const modifiedUpdateInfo = await users.updateOne({"username": username}, 
-    {set:
+    {$set:
         { "validLoginSessions" : array}
     });
     if(modifiedUpdateInfo.modifiedCount === 0){
