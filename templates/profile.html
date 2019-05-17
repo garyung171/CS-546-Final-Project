@@ -5,6 +5,12 @@
     <p>Username: {{username}}</p>
     <p>Location: {{location}}</p>
     <p>Email: {{email}}</p>
+    <p>Preferences:</p>
+    {% for item in preferences %}
+    <p>item</p>
+    {% else %}
+    <p>No current preferences.</p>
+    {% endfor %}
     {% if profileOwned %}
     <a href="/edit-profile/{{profileAddress}}">
         <button type="button" class="btn btn-dark"> Edit Profile </button>
