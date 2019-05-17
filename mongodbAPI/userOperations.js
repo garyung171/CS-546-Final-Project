@@ -61,9 +61,7 @@ let addSessionToUser = async function(user,sessionID){
         throw "No user inputted";
     }
     const users = await usersCollection();
-    console.log(user);
     user["validLoginSessions"].push(sessionID);
-    console.log(user["validLoginSessions"]);
     const modifiedUpdateInfo = await users.updateOne({"_id":user["_id"]},
     {$set:
         {
