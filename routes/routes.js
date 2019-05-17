@@ -234,6 +234,7 @@ router.post("/updatePreferences", async (req, res) => {
         }else{
             let currentUser = await userOperations.getUserBySessionID(req.session.id);
             let preferences = req.body.preferences;
+            console.log(preferences);
             let update = await userOperations.updatePreferences(currentUser.username, preferences);
             if(update){
                 // Ajax
