@@ -4,6 +4,7 @@ const bcrypt = require("bcrypt");
 const path = require("path");
 const slugify = require("slugify");
 const userOperations = require("../mongodbAPI/userOperations");
+const meetingsOperation = require("../mongodbAPI/meetingsOperations");
 const saltRounds = 8;
 
 let checkLoginValidity = async function(username,password){
@@ -98,6 +99,7 @@ router.get("/profile/:username", async(req, res) => {
             email: currentUser.email,
             profileOwned:profileOwned,
             profileAddress:currentUser["profileAddress"],
+            prefrences:currentUser.prefrences,
             loggedIn:req.session.loggedIn
         });
         return;
@@ -226,5 +228,36 @@ router.post("/updateEmail", async(req,res) => {
     }
 });
 
+router.get("/create-meeting", async(req,res) =>{
+    try{
+        res.render("create_meeting",{createError:req.session.createError ? true : false});
+    }
+    catch(e){
+        console.log(e);
+        res.sendStatus(500);
+    }
+} 
 
+router.post("/create-meeting", async (req,res) =>{
+    if(!req.body.meetupName || !req.body.owner || !req.body.date || !req.body.location){
+        req.session.createError = true;
+        res.redirect("/create-meeting");
+        return;
+    }
+    try{
+        req.session.createError = false;
+        let meetingCreated = await createMeeting(
+            req.body.meetupName,
+            req.body.owner,
+            new Date(req.body.date),
+            req.body.location
+        );
+        res.redirect("/meeting/"+meetingCreated);
+        return;
+    }catch(e){
+        console.log(e);
+        res.sendStatus(500);
+    }
+}
+    
 module.exports = router;

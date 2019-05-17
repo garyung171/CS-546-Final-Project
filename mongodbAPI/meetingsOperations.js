@@ -4,7 +4,7 @@ const ObjectID = require("mongodb").ObjectID;
 const slugify = require("slugify");
 
 let createMeeting = async function(meetupName,owner,date,location){
-    if(!meetingsCollection || !owner || !date || !location){
+    if(!meetupName || !owner || !date || !location){
         return false;
     }
     else{
@@ -24,11 +24,24 @@ let createMeeting = async function(meetupName,owner,date,location){
                     } 
         const insertInfo = await meetings.insertOne(meeting);
         if(insertInfo.insertedCount === 0){
-            throw "Unable to create user."
+            throw "Unable to create meeting."
         }
-        return true;
+        return insertInfo.insertedId;
     }
 } 
+
+let getMeetingByName = async function(meetupName){
+    if(!meetupName){
+        return false;
+    }else{
+        const meetings = await meetingsCollection();
+        const found = await meetings.findOne({"meetupName" : meetupName});
+        if(found === null){
+            return {"empty" : true};
+        }
+        return found;
+    }
+}
 
 let getMeetingByOwnerId = async function(ownerId){
     if(!ownerId){
