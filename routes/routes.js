@@ -127,16 +127,6 @@ router.get("/logout", async(req, res) => {
     }
 });
 
-router.get("/updatePage", async (req, res) => {
-    try{
-        let currentUser = await userOperations.getUserBySessionID(req.session.id);
-        // render the update view with the currentUser values
-    }catch(e){
-        console.log(e);
-        res.sendStatus(500);
-    }
-});
-
 router.post("/updateName", async(req, res) => {
     try{
         if(req.body.newName == ""){
@@ -172,6 +162,21 @@ router.post("/updatePassword", async(req, res) =>{
                 // Where are we directing after this?
             }
         }
+    }catch(e){
+        console.log(e);
+        res.sendStatus(500);
+    }
+});
+router.get("/edit-profile/:profileAddress", async (req, res) => {
+    try{
+        let currentUser = await userOperations.getUserBySessionID(req.session.id);
+        if (currentUser.profileAddress != profileAddress) {
+            res.sendStatus(403);
+        }
+        res.render("edit-profile",
+            {title: "Edit Profile"}
+        );
+        return;
     }catch(e){
         console.log(e);
         res.sendStatus(500);
