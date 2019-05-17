@@ -236,7 +236,7 @@ router.get("/create-meeting", async(req,res) =>{
         console.log(e);
         res.sendStatus(500);
     }
-} 
+});
 
 router.post("/create-meeting", async (req,res) =>{
     if(!req.body.meetupName || !req.body.owner || !req.body.date || !req.body.location){
@@ -258,6 +258,6 @@ router.post("/create-meeting", async (req,res) =>{
         console.log(e);
         res.sendStatus(500);
     }
-}
+});
     
 module.exports = router;

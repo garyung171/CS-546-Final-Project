@@ -100,7 +100,7 @@ let getFutureMeetings = async function(date){
         return false;
     }else{
         const meetings = await meetingsCollection();
-        let found = await meetings.find({"date" : {$gt : date}});
+        let found = await meetings.find({"date" : {$gt : date}}).sort({date : -1});
         if(found === null){
             return {"empty" : true};
         }
@@ -113,7 +113,7 @@ let getPreviousMeetings = async function(date){
         return false;
     }else{
         const meetings = await meetingsCollection();
-        let found = await meetings.find({"date" : {$lt : date}});
+        let found = await meetings.find({"date" : {$lt : date}}).sort({date : -1});
         if(found === null){
             return {"empty" : true};
         }
