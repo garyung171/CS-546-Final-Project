@@ -100,7 +100,8 @@ router.get("/profile/:username", async(req, res) => {
             profileOwned:profileOwned,
             profileAddress:currentUser["profileAddress"],
             prefrences:currentUser.prefrences,
-            loggedIn:req.session.loggedIn
+            loggedIn:req.session.loggedIn,
+            userProfile: currentUser["username"] 
         });
         return;
     }catch(e){
@@ -228,16 +229,6 @@ router.post("/updateEmail", async(req,res) => {
     }
 });
 
-router.get("/create-meeting", async(req,res) =>{
-    try{
-        res.render("create_meeting",{createError:req.session.createError ? true : false});
-    }
-    catch(e){
-        console.log(e);
-        res.sendStatus(500);
-    }
-});
-
 router.post("/updatePreferences", async (req, res) => {
     try{
         if(req.body.preferences == ""){
@@ -256,17 +247,28 @@ router.post("/updatePreferences", async (req, res) => {
     }
 })
 
+router.get("/create-meeting", async(req,res) =>{
+    try{
+        res.render("create-meeting",{createError:req.session.createError ? true : false});
+    }
+    catch(e){
+        console.log(e);
+        res.sendStatus(500);
+    }
+});
+
 router.post("/create-meeting", async (req,res) =>{
-    if(!req.body.meetupName || !req.body.owner || !req.body.date || !req.body.location){
+    if(!req.body.meetupName || !req.body.date || !req.body.location || new Date(req.body.date) < new Date()){
         req.session.createError = true;
         res.redirect("/create-meeting");
         return;
     }
     try{
         req.session.createError = false;
+        let owner = await userOperations.getUserBySessionID(req.session.id);
         let meetingCreated = await createMeeting(
             req.body.meetupName,
-            req.body.owner,
+            owner["_id"],
             new Date(req.body.date),
             req.body.location
         );
