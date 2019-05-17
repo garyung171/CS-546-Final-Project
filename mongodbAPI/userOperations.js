@@ -160,6 +160,18 @@ let updateEmail = async function(username, newEmail){
     return true;
 }
 
+let updatePreferences = async function(username, prefArray){
+    const users = usersCollection();
+    const modifiedUpdateInfo = await users.updateOne({"username" : username}, 
+    {$set : 
+        {"preferences" : prefArray}
+    });
+    if(modifiedUpdateInfo.modifiedCount === 0){
+        throw "Could not update user.";
+    }
+    return true;
+}
+
 module.exports = {
     getAllUsers,
     getUserByUsername,
@@ -172,5 +184,6 @@ module.exports = {
     updateUsername,
     updatePassword,
     updateLocation,
-    updateEmail
+    updateEmail,
+    updatePreferences
 }
