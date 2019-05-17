@@ -104,10 +104,11 @@ router.post("/logout", async(req, res) => {
                 sessions.splice(i, 1);
             }
         }
-        await userOperations.updateSessions(currentUser.username, array);
-        // Redirect to a logout page or somewhere else?
-        res.redirect("/");
-        return;
+        let update = await userOperations.updateSessions(currentUser.username, array);
+        if(update){
+            res.redirect("/");
+            return;
+        }
     }catch(e){
         console.log(e);
         res.sendStatus(500);
@@ -124,18 +125,64 @@ router.get("/updatePage", async (req, res) => {
     }
 });
 
-router.post("/updatePage", async(req, res) => {
+router.post("/updateName", async(req, res) => {
     try{
-        let currentUser = await userOperations.getUserBySessionID(req.session.id);
-        let newLocation = req.body.newLocation;
-        let newUserName = req.body.newUserName;
-        let newPassword = req.body.newPassword;
-        // how to update the preferences? allow to change all?
-        //same with how to update all the fields
+        if(req.body.newName == ""){
+            res.send("Please enter a vlid username");
+        }else{
+            let currentUser = await userOperations.getUserBySessionID(req.session.id);
+            let newName = req.body.newName;
+            const usernameInDatabase = await userOpertaions.getUserByUsername(currentUser.username)["empty"] == false;
+            const profileAddressInDatabase = await userOpertaions.getUserByProfileAddress(slugify(currentUser.username))["empty"] == false;
+            if(usernameInDatabase||profileAddressInDatabase){
+                res.send("Username is taken.");
+            } 
+            let update = userOperations.updateUsername(currentUser.username, newName);
+            if(update){
+                // Where are we directing after this?
+            }
+        }
     }catch(e){
-        cosole.log(e);
+        console.log(e);
         res.sendStatus(500);
     }
 });
+
+router.post("/updatePassword", async(req, res) =>{
+    try{
+        if(req.body.newPassword == ""){
+            res.send("Please enter a valid password.");
+        }else{
+            let currentUser = await userOperations.getUserBySessionID(req.session.id);
+            let newPassword = await bcrypt.hash(req.body.newPassword, saltRounds);
+            let update = userOperations.updatePassword(currentUser.username, newPassword);
+            if(update){
+                // Where are we directing after this?
+            }
+        }
+    }catch(e){
+        console.log(e);
+        res.sendStatus(500);
+    }
+});
+
+router.post("/updateLocation", async(req, res) =>{
+    try{
+        if(req.body.newLocation == ""){
+            res.send("Please enter a valid location.");
+        }else{
+            let currentUser = await userOperations.getUserBySessionID(req.session.id);
+            let newLocation = req.body.newLocation;
+            let update = userOperations.updateLocation(currentUser.username, newLocation);
+            if(update){
+                // Where are we directing after this?
+            }
+        }
+    }catch(e){
+        console.log(e);
+        res.sendStatus(500);
+    }
+});
+
 
 module.exports = router;

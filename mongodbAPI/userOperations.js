@@ -105,13 +105,51 @@ let createUser = async function(username, password, location, email){
 let updateSessions = async function(username, array){
     const users = await usersCollection();
     const modifiedUpdateInfo = await users.updateOne({"username": username}, 
-    {set:
+    {$set:
         { "validLoginSessions" : array}
     });
     if(modifiedUpdateInfo.modifiedCount === 0){
-        console.log("Could not update user.");
+        throw "Could not update user.";
     }
+    return true;
 }
+
+let updateUsername = async function(username, newName){
+    const users = await usersCollection();
+    const modifiedUpdateInfo = await users.updateOne({"username": username},
+    {$set:
+        { "username" : newName}
+    });
+    if(modifiedUpdateInfo.modifiedCount === 0){
+        throw "Could not update user.";
+    }
+    return true;
+}
+
+let updatePassword = async function(username, newPassword){
+    const users = await usersCollection();
+    const modifiedUpdateInfo = await users.updateOne({"username": username},
+    {$set:
+        {"password" : newPassword}
+    });
+    if(modifiedUpdateInfo.modifiedCount === 0){
+        throw "Could not update user.";
+    }
+    return true;
+}
+
+let updateLocation = async function(username, newLocation){
+    const users = await usersCollection();
+    const modifiedUpdateInfo = await users.updateOne({"username": username},
+    {$set:
+        {"location" : newLocation}
+    });
+    if(modifiedUpdateInfo.modifiedCount === 0){
+        throw "Could not update user.";
+    }
+    return true;
+}
+
 module.exports = {
     getAllUsers,
     getUserByUsername,
@@ -120,5 +158,8 @@ module.exports = {
     addSessionToUser,
     getUserByProfileAddress,
     createUser,
-    updateSessions
+    updateSessions,
+    updateUsername,
+    updatePassword,
+    updateLocation
 }
