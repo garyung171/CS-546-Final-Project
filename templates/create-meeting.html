@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block body %}
+    <form id="meeting-creation-form" method="post" action="/create-meeting">
+        <label for="meetupName">Meetup Name</label>
+        <input id = "meetupName" name="meetupName" class="form-control" placeholder="Enter Meetup Name">
+        <label for="date">Meetup Date</label>
+        <input id = "date" name="date" class="form-control" type="date">
+        <label for="meetupName">Meetup Location</label>
+        <input id = "meetupLocation" name="meetupLocation" class="form-control" placeholder="Enter Meetup Location">
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+    {% if createError %}
+    <p class="alert alert-danger">Either the date for the meetup is before todays date or you did not provide information for all the fields<p>
+    {% endif %}
+{% endblock %}
