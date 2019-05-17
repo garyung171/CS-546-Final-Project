@@ -173,15 +173,9 @@ router.get("/edit-profile/:profileAddress", async (req, res) => {
         if (currentUser.profileAddress != profileAddress) {
             res.sendStatus(403);
         }
-<<<<<<< HEAD
-        res.render("edit-profile",{
-            title: "Edit Profile"
-        });
-=======
         res.render("edit-profile",
             {title: "Edit Profile"}
         );
->>>>>>> e8cf1de8f67ebe654580fe44fbcade6e7dcfb677
         return;
     }catch(e){
         console.log(e);
