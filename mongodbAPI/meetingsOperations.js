@@ -29,4 +29,91 @@ let createMeeting = async function(meetupName,owner,date,location){
         return true;
     }
 } 
-        
+
+let getMeetingByOwnerId = async function(ownerId){
+    if(!ownerId){
+        return false;
+    }else{
+        const meetings = await meetingsCollection();
+        const found = await meetings.findOne({"owner" : ownerId});
+        if(found === null){
+            return {"empty" : true};
+        }
+        return found;
+    }
+}
+
+let getMeetingByUserId = async function(userId){
+    if(!userId){
+        return false;
+    }else{
+        const meetings = await meetingsCollection();
+        const found = await meetings.find({"attendees" : userId});
+        if(found === null){
+            return {"empty" : true};
+        }
+        return found;
+    }
+}
+
+let getMeetingByLocation = async function(location){
+    if(!location){
+        return false;
+    }else{
+        const meetings = await meetingsCollection();
+        const found = await meetings.find({"location" : location});
+        if(found === null){
+            return {"empty" : true};
+        }
+        return found;
+    }
+}
+
+let getMeetingByPreferences = async function(prefArray){
+    if(!prefArray){
+        return false;
+    }else{
+        const meetings = await meetingsCollection();
+        let found = await meetings.find({"preferences" : {$in : prefArray}});
+        if(found === null){
+            return {"empty" : true};
+        }
+        return found;
+    }
+}
+
+let getFutureMeetings = async function(date){
+    if(!date){
+        return false;
+    }else{
+        const meetings = await meetingsCollection();
+        let found = await meetings.find({"date" : {$gt : date}});
+        if(found === null){
+            return {"empty" : true};
+        }
+        return found;
+    }
+}
+
+let getPreviousMeetings = async function(date){
+    if(!date){
+        return false;
+    }else{
+        const meetings = await meetingsCollection();
+        let found = await meetings.find({"date" : {$lt : date}});
+        if(found === null){
+            return {"empty" : true};
+        }
+        return found;
+    }
+}
+
+module.exports = {
+    createMeeting,
+    getMeetingByUserId,
+    getMeetingByOwnerId,
+    getMeetingByLocation,
+    getMeetingByPreferences,
+    getPreviousMeetings,
+    getFutureMeetings
+}
