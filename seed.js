@@ -1,11 +1,20 @@
+const usersCollection = require("./mongodbAPI/getCollections").users
+const meetingsCollection = require("./mongodbAPI/getCollections").meetups;
 const userOperations = require("./mongodbAPI/userOperations.js");
 const meetingsOperations = require("./mongodbAPI/meetingsOperations.js");
 const connection = require("./mongodbAPI/establishConnection.js");
-
+const bcrypt = require("bcrypt");
+const saltRounds = 8
 async function main(){
     try{
-        let detective = await userOperations.createUser("masterdetective123", "blah", "Hoboken", "blah@blah.com");
-        let lemon = await userOperations.createUser("lemon", "blah", "Hoboken", "blah@blah.com");
+        let users = await usersCollection();
+        let meetups = await meetingsCollection();
+        await users.deleteMany({});
+        await meetups.deleteMany({});  
+        let password1 = await bcrypt.hash("blah1",saltRounds);
+        let password2 = await bcrypt.hash("blah2",saltRounds);
+        let detective = await userOperations.createUser("masterdetective123", password1, "Hoboken", "blah@blah.com");
+        let lemon = await userOperations.createUser("lemon", password2, "Hoboken", "blah@blah.com");
         await meetingsOperations.createMeeting("Smite1", detective._id, new Date(), "Hoboken", ["Smite"]);
         await meetingsOperations.createMeeting("Dota1", detective._id, new Date(), "Hoboken", ["Dota"]);
         await meetingsOperations.createMeeting("Mixed", detective._id, new Date(), "Hoboken", ["Smite", "Dota"]);
