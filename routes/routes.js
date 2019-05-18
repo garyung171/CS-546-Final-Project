@@ -326,11 +326,16 @@ router.get("/relevantMeetups", async (req, res) => {
     try{
         let currentUser = await userOperations.getUserBySessionID(req.session.id);
         let meetings = await userOperations.getRelevantMeetings(currentUser.username);
-        for (let i = 0; i < meetings.length; i++) {
-            meetings[i].owner = await userOperations.getUserById(meetings[i].owner).username;
+        async function revise(meetArray){
+            for (const meeting of meetArray) {
+                let owner = await userOperations.getUserById(meeting.owner)
+                meeting.owner = owner.username;
+            }
+            return meetArray;
         }
+        let newMeetings = await revise(await meetings.toArray());
         res.render("meetups", {
-            meetups: await meetings.toArray()
+            meetups: await newMeetings
         });
     }catch(e){
         console.log(e);
