@@ -401,7 +401,16 @@ router.get("/my-meetings/:username", async(req,res)=>{
         }) != undefined;
         previousMeetings = await meetingsOperations.getUsersPreviousMeetings(currentUser["_id"],new Date());
         futureMeetings = await meetingsOperations.getUsersFutureMeetings(currentUser["_id"],new Date());
-        res.render("my-meetings",{futureMeetings:futureMeetings,previousMeetings:previousMeetings,loggedIn:req.session.loggedIn});
+        async function revise(meetArray){
+            for (const meeting of meetArray) {
+                let owner = await userOperations.getUserById(meeting.owner)
+                meeting.owner = owner.username;
+            }
+            return meetArray;
+        }
+        let newFutureMeetings = await revise(futureMeetings);
+        let newPreviousMeetings = await revise(previousMeetings);
+        res.render("my-meetings",{futureMeetings:newFutureMeetings,previousMeetings:newPreviousMeetings,loggedIn:req.session.loggedIn});
         return;
     }catch(e){
         console.log(e);
