@@ -164,11 +164,14 @@ let updateMeetingAttendees = async function(meetId, user){
         return false;
     }else{
         const meetings = await meetingsCollection();
-        // const users = await usersCollection();
         let meeting = await getMeetingByMeetId(meetId);
-        // let user = await users.getUserById(userId);
         let attendees = meeting.attendees;
-        // logic to check if user is already in attendees but it's 4 am
+        let containsUser = attendees.find(function(attendeeID){
+            return user._id.toString() == attendeeID.toString();
+        });
+        if(containsUser !== undefined){
+            return false;
+        }
         attendees.push(user._id);
         const modifiedUpdateInfo = await meetings.updateOne(
             {"_id" : meetId},
@@ -187,6 +190,10 @@ let updateMeetingsComments = async function(meetId, comment){
     }else{
         const meetings = await meetingsCollection();
         let meeting = await getMeetingByMeetId(meetId);
+        if(!meeting){
+            console.log("no meetings match");
+            throw "Unable to create comment"
+        }
         let comments = meeting.comments;
         comments.push(comment);
         const modifiedUpdateInfo = await meetings.updateOne(

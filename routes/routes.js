@@ -91,6 +91,9 @@ router.post("/signup", async(req, res) =>{
             res.redirect("/");
             return;
         }
+        req.session.loggedIn=true;
+        let newUser = await userOperations.getUserByUsername(username);
+        await userOperations.addSessionToUser(newUser,req.session.id);
         res.redirect("/profile/"+slugify(username));
     }catch(e){
         console.log(e);
@@ -304,6 +307,7 @@ router.post("/create-meeting", async (req,res) =>{
 
 router.get("/joinmeeting/:meetingName", async (req, res) =>{
     try{
+        req.session.joinError = false;
         let currentUser = await userOperations.getUserBySessionID(req.session.id);
         let meeting = await meetingsOperations.getMeetingByName(req.params.meetingName);
         let joined = await meetingsOperations.updateMeetingAttendees(meeting._id, currentUser);
@@ -355,8 +359,17 @@ router.get("/meeting/:meetId", async (req, res) => {
         let date = meetup.date;
         let location = meetup.location;
         let comments = meetup.comments;
+        for(let comment of comments){
+            let commentPoster = await userOperations.getUserById(comment["postBy"]);
+            comment["postBy"] = commentPoster.username;
+        }
         let preferences = meetup.preferences;
-        res.render("detail", {meetupName: meetupName, owner: ownerName, attendees: attendeesNames, date: date, location: location, comments: comments, preferences: preferences, joinError:req.session.joinError ? true : false});
+        let joinError = false;
+        if(req.session.joinError){
+            joinError = true 
+            req.session.joinError = false;
+        }
+        res.render("detail", {meetId:meetId,meetupName: meetupName, owner: ownerName, attendees: attendeesNames, date: date, location: location, comments: comments, preferences: preferences, joinError:joinError});
         return;
     }catch(e){
         console.log(e);
@@ -380,34 +393,26 @@ router.get("/my-meetings/:username", async(req,res)=>{
     }
 });
 
-router.get("/comments:meetId", async(req, res) => {
-    try{
-        let meeting = await meetingsOperations.getMeetingByMeetId(req.params.meetId);
-        let comments = meeting.comments;
-        //render to page with comment fields
-    }catch(e){
-        console.log(e);
-        res.sendStatus(500);
-    }
-});
 
-router.post("/comments:meetId", async (req, res) => {
+router.post("/comments/:meetId", async (req, res) => {
     try{
-        let meeting = await meetingsOperations.getMeetingByMeetId(req.params.meetId);
+        let meeting = await meetingsOperations.getMeetingByMeetId(ObjectID(req.params.meetId));
         let user = await userOperations.getUserBySessionID(req.session.id);
-        // Not sure how to properly set _id
         let comment = {
-            "_id": meeting.comments.length + 1,
+            "_id": new ObjectID(),
             "postBy" : user._id,
-            "date" : new Date(req.body.date),
-            "text" : req.body.comment
+            "date" : new Date(),
+            "text" : req.body.commentText
         }
-        let update = await meetingsOperations.updateMeetingComments(req.params.meetId, comment);
-        res.send(update);
+        let update = await meetingsOperations.updateMeetingsComments(ObjectID(req.params.meetId), comment);
+        if(!update){
+            throw "Unable to create comment"
+        }
+        res.redirect("/meeting/"+req.params.meetId);
         return;
     }catch(e){
         console.log(e);
-        res.send(false);
+        res.sendStatus(500);
         return;
     }
 });

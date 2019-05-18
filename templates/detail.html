@@ -12,11 +12,26 @@
 <br>
 <p> Date: {{date}}</p>
 <p> Location: {{location}} </p>
-<p> Comments : {{comments}}</p> 
+<p> Comments: </p> 
+{% for comment in comments %}
+    <p>{{comment.postBy}}</p>
+    <p>{{comment.date}}</p>
+    <p>{{comment.text}}</p>
+{%else%} 
+<p> No Comment Available </p>
+{% endfor %}
 <a href="/joinmeeting/{{meetupName}}">
     <button type="button" class="btn btn-dark"> Join </button>
 </a>
 {% if joinError %}
 <p class="alert alert-danger">You are already a part of this meetup.<p>
 {% endif %}
+<form method = "post" action = "/comments/{{meetId}}">
+    <label for="commentText">Make A Comment:</labe>
+    <br>
+    <textarea id="commentText" name="commentText" placeholder="Enter your comment here"></textarea>
+    <br>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
 {% endblock %}
+
