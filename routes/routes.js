@@ -57,7 +57,7 @@ router.post("/login",async (req,res)=>{
     try{
         req.session.loginError = false;
         req.session.signupError = false;
-        let validLogin = await checkLoginValidity(req.body.username,req.body.password);
+        let validLogin = await checkLoginValidity(req.body.loginUsername,req.body.loginPassword);
         if(validLogin){
             let currentUser = await userOperations.getUserByUsername(req.body.username);
             await userOperations.addSessionToUser(currentUser,req.session.id);
@@ -401,7 +401,7 @@ router.get("/my-meetings/:username", async(req,res)=>{
         }) != undefined;
         previousMeetings = await meetingsOperations.getUsersPreviousMeetings(currentUser["_id"],new Date());
         futureMeetings = await meetingsOperations.getUsersFutureMeetings(currentUser["_id"],new Date());
-        res.render("my-meetings",{futureMeetings:futureMeetings,previousMeetings:previousMeetings,loggedIn:req.session.loggedIn});
+        res.render("my-meetings",{futureMeetings:futureMeetings,previousMeetings:previousMeetings,loggedIn:req.session.loggedIn,userProfile:currentUser["profileAddress"]});
         return;
     }catch(e){
         console.log(e);

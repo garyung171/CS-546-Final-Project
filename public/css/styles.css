@@ -4,6 +4,15 @@ body{
 .navbar-brand{
     font-family:'Roboto', sans-serif;
 }
+.nav-item{
+    color:white;
+}
+.nav-link{
+    color:white;
+}
+.nav-link:hover{
+    color: #e6e6e6;
+}
 #body-box{
     display:flex;
     justify-content:space-around;
