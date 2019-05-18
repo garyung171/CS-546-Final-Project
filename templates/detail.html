@@ -40,6 +40,9 @@
 {% if joinError %}
 <p class="alert alert-danger">You are already a part of this meetup.<p>
 {% endif %}
+{% if leaveError %}
+<p class="alert alert-danger">You are not a part of this meetup.<p>
+{% endif %}
 <form method = "post" action = "/comments/{{meetId}}">
     <label for="commentText">Make A Comment:</label>
     <br>
