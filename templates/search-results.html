@@ -8,8 +8,8 @@
         <p>Owner: {{meeting.owner}}</p>
         <p>Location: {{meeting.location}}</p>
         <p>Preferences: {{meeting.preferences}}</p>
-        <form href="/meeting/{{meeting._id}}" method="get">
-            <button type="button" class="btn btn-dark"> Details </button>
+        <form action="/meeting/{{meeting._id}}" method="get">
+            <button type="submit" class="btn btn-dark"> Details </button>
         </form>
         </div>
     {% else %}

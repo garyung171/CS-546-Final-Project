@@ -12,9 +12,9 @@
     <p>No current preferences.</p>
     {% endfor %}
     {% if profileOwned %}
-    <a href="/edit-profile/{{profileAddress}}">
-        <button type="button" class="btn btn-dark"> Edit Profile </button>
-    </a>
+    <form action="/edit-profile/{{profileAddress}}" method="get">
+        <button type="submit" class="btn btn-dark"> Edit Profile </button>
+    </form>
     {% endif %}
     </div>
 </div>

@@ -8,8 +8,8 @@
     <p>Owner: {{item.owner}}</p>
     <p>Location: {{item.location}}</p>
     <p>Preferences: {{item.preferences}}</p>
-    <form method="get" href="/meeting/{{item._id}}">
-        <button type="button" class="btn btn-dark"> Details </button>
+    <form method="get" action="/meeting/{{item._id}}">
+        <button type="submit" class="btn btn-dark"> Details </button>
     </form>
     </div>
 {% else %}
