@@ -324,7 +324,8 @@ router.get("/detailedView:meetId", async (req, res) => {
         let date = meetup.date;
         let location = meetup.location;
         let comments = meetup.comments;
-        res.render("detail", {meetupName: meetupName, owner: ownerName, attendees: attendeesNames, date: date, location: location, comments: comments});
+        let preferences = meetup.preferences;
+        res.render("detail", {meetupName: meetupName, owner: ownerName, attendees: attendeesNames, date: date, location: location, comments: comments, preferences: preferences});
         return;
     }catch(e){
         console.log(e);
