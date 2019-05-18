@@ -110,8 +110,7 @@ router.get("/profile/:username", async(req, res) => {
             profileAddress:currentUser["profileAddress"],
             preferences:currentUser.preferences,
             loggedIn:req.session.loggedIn,
-            userProfile: currentUser["username"] 
-
+            userProfile: currentUser["username"]
         });
         return;
     }catch(e){
@@ -292,12 +291,14 @@ router.post("/create-meeting", async (req,res) =>{
         res.sendStatus(500);
     }
 });
-    
+
 router.get("/relevantMeetups", async (req, res) => {
     try{
         let currentUser = await userOperations.getUserBySessionID(req.session.id);
         let meetings = await userOperations.getRelevantMeetings(currentUser.username);
-        //res.render() using meetings as the list of ordered meetups by popularity.
+        res.render("meetups", {
+            meetups:meetings
+        });
     }catch(e){
         console.log(e);
         res.sendStatus(500);

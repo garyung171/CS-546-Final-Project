@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block body %}
+{% for item in meetups %}
+<!-- replace owner and attendee ids with the information about respective thing in database -->
+<p>{{item.owner}}</p>
+<p>{{item.attendees}}</p>
+<p>{{item.date}}</p>
+<p>{{item.location}}</p>
+{% else %}
+<p>No current meetups.</p>
+{% endfor %}
+
+{% endblock %}
