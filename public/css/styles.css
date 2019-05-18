@@ -3,14 +3,18 @@ body{
 }
 .navbar-brand{
     font-family:'Roboto', sans-serif;
-}
-.nav-item{
     color:white;
 }
-.nav-link{
+.navbar-light .navbar-nav .nav-link {
     color:white;
 }
-.nav-link:hover{
+.navbar-default .navbar-nav > li {
+    color:white
+}
+.navbar-default .navbar-nav > li > a {
+    color:white;
+}
+.navbar-default .navbar-nav > li > a :hover{
     color: #e6e6e6;
 }
 #body-box{
@@ -32,6 +36,11 @@ body{
     width:40%;
     border-radius:5px;
     height:500px;
+}
+.meetups-container{
+    border:2px solid black;
+    border-radius:5px;
+    padding:5%;
 }
 #commentText{
     height:500px;
