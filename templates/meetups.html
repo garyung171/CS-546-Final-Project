@@ -2,19 +2,23 @@
 
 {% block body %}
 {% for item in meetups %}
-<div>
-<br>
-<p>Name : {{item.meetupName}}</p>
-<p>Owner: {{item.owner}}</p>
-<p>Location: {{item.location}}</p>
-<p>Preferences: {{item.preferences}}</p>
-<a href="/meeting/{{item._id}}">
-    <button type="button" class="btn btn-dark"> Details </button>
-</a>
-<br>
+<div id="body-box">
+    <div id="meetups-container">
+    <br>
+    <p>Name : {{item.meetupName}}</p>
+    <p>Owner: {{item.owner}}</p>
+    <p>Location: {{item.location}}</p>
+    <p>Preferences: {{item.preferences}}</p>
+    <a href="/meeting/{{item._id}}">
+        <button type="button" class="btn btn-dark"> Details </button>
+    </a>
+    <br>
+    </div>
 </div>
 {% else %}
+<div id="body-box">
 <p>No current meetups.</p>
+</div>
 {% endfor %}
 
 {% endblock %}
