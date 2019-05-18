@@ -22,14 +22,23 @@ npm start
 ```
 ## Test User
 We have created two users which you can use 
+
 The first user is 
+
 Username:
+
 masterdetective123
+
 Password:
+
 blah1
 
 The second user is 
+
 Username:
+
 lemon
+
 Password:
+
 blah2
