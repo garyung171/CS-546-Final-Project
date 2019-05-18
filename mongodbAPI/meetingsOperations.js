@@ -245,7 +245,6 @@ let leaveMeeting = async function(userId, meetId){
     let len = attendees.length;
     for(let i = 0; i<len; i++){
         if(attendees[i].toString() == userId.toString()){
-            console.log("deleted");
             attendees.splice(i, 1);
         }
     };
@@ -258,7 +257,7 @@ let leaveMeeting = async function(userId, meetId){
             {attendees : attendees}
         }
     );
-    //console.log(modifiedUpdateInfo.modifiedCount);
+
     if (modifiedUpdateInfo.modifiedCount === 0){
         return false;
     }
