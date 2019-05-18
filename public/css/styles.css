@@ -37,6 +37,11 @@ body{
     border-radius:5px;
     height:500px;
 }
+.meetups-container{
+    border:2px solid black;
+    border-radius:5px;
+    padding:5%;
+}
 #commentText{
     height:500px;
     width:500px;
