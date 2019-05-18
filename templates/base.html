@@ -20,13 +20,13 @@
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item active">
+
         <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
       </li>
-
+      {% if loggedIn %}
       <li class="nav-item">
         <a class="nav-link" href="/relevantMeetups">Find Meetings</a>
       </li>
-        {% if loggedIn %}
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         Account
@@ -40,6 +40,7 @@
       </li>
         {% endif %}
     </ul>
+    {% if loggedIn %}
     <ul class="navbar-nav ml-auto navitems">
       <li class="nav-item">
         <form class="form-inline my-2 my-lg-0" method="get" action="/search/">
@@ -52,6 +53,7 @@
       </li>
 
     </ul>
+    {% endif %}
     </div>
     </nav>
     {% block body %}

@@ -116,7 +116,7 @@ router.get("/profile/:username", async(req, res) => {
             profileAddress:currentUser["profileAddress"],
             preferences:currentUser.preferences,
             loggedIn:req.session.loggedIn,
-            userProfile: currentUser["username"]
+            userProfile: currentUser["profileAddress"]
         });
         return;
     }catch(e){
@@ -133,7 +133,9 @@ router.get("/edit-profile/:profileAddress", async (req, res) => {
             return;
         }
         res.render("edit-profile",{
-            title: "Edit Profile"
+            title: "Edit Profile",
+            loggedIn: req.session.loggedIn,
+            userProfile: currentUser["profileAddress"]
         });
         return;
     }catch(e){
@@ -267,7 +269,8 @@ router.post("/updatePreferences", async (req, res) => {
 
 router.get("/create-meeting", async(req,res) =>{
     try{
-        res.render("create-meeting",{createError:req.session.createError ? true : false});
+        let currentUser = await userOperations.getUserBySessionID(req.session.id);
+        res.render("create-meeting",{createError:req.session.createError ? true : false,loggedIn:req.session.loggedIn,userProfile:currentUser["profileAddress"]});
     }
     catch(e){
         console.log(e);
@@ -335,7 +338,9 @@ router.get("/relevantMeetups", async (req, res) => {
         }
         let newMeetings = await revise(await meetings.toArray());
         res.render("meetups", {
-            meetups: await newMeetings
+            meetups: await newMeetings,
+            loggedIn:req.session.loggedIn,
+            userProfile:currentUser["profileAddress"]
         });
     }catch(e){
         console.log(e);
@@ -374,7 +379,7 @@ router.get("/meeting/:meetId", async (req, res) => {
             joinError = true 
             req.session.joinError = false;
         }
-        res.render("detail", {meetId:meetId,meetupName: meetupName, owner: ownerName, attendees: attendeesNames, date: date, location: location, comments: comments, preferences: preferences, joinError:joinError});
+        res.render("detail", {meetId:meetId,meetupName: meetupName, owner: ownerName, attendees: attendeesNames, date: date, location: location, comments: comments, preferences: preferences, joinError:joinError,loggedIn:req.session.loggedIn});
         return;
     }catch(e){
         console.log(e);
@@ -390,7 +395,7 @@ router.get("/my-meetings/:username", async(req,res)=>{
         }) != undefined;
         previousMeetings = await meetingsOperations.getUsersPreviousMeetings(currentUser["_id"],new Date());
         futureMeetings = await meetingsOperations.getUsersFutureMeetings(currentUser["_id"],new Date());
-        res.render("my-meetings",{futureMeetings:futureMeetings,previousMeetings:previousMeetings});
+        res.render("my-meetings",{futureMeetings:futureMeetings,previousMeetings:previousMeetings,loggedIn:req.session.loggedIn});
         return;
     }catch(e){
         console.log(e);
@@ -442,6 +447,7 @@ router.post("/leaveMeetup/:meetId", async(req, res) => {
 router.get("/search/", async(req,res) => {
     try{
         let query = req.query.query;
+        let currentUser = await userOperations.getUserBySessionID(req.session.id);
         let allMatchedMeetings = await meetingsOperations.getMeetingsByRegex(`.*${query}.*`);
         for(let word of query.split(" ")){
             let matchedMeetings =  await meetingsOperations.getMeetingsByRegex(`.*${word}.*`);
@@ -454,7 +460,7 @@ router.get("/search/", async(req,res) => {
                 }
             }
         }
-        res.render("search-results",{meetings:allMatchedMeetings}); 
+        res.render("search-results",{meetings:allMatchedMeetings,loggedIn:req.session.loggedIn,userProfile:currentUser["profileAddress"]}); 
     }catch(e){
         console.log(e);
         res.sendStatus(500);
