@@ -26,6 +26,28 @@ const njk = nunjucks(app,{
     noCache:devServer
 });
 
+var routeLogger = function(req,res,next){
+    let requestDateTime = new Date().toUTCString();
+    let method = req.method;
+    let url = req.originalUrl;
+    let authenticationStatus = (req.session.loggedIn) ? "(Autheticated User)":"(Non-Authenticated User)";
+    console.log(`[${requestDateTime}]: ${method} ${url} ${authenticationStatus}`);
+    next();
+}
+
+let authenticationMiddleware = function(req,res,next){
+    if((req.originalUrl != "/" && req.originalUrl != "/login" && req.originalUrl != "/signup") && !req.session.loggedIn){
+        res.redirect("/");
+    }
+    else{
+        next();
+    }
+}
+
+app.use(routeLogger);
+
+app.use(authenticationMiddleware);
+
 configRoutes(app);
 
 app.listen(3000, ()=>{
