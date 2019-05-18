@@ -1,9 +1,9 @@
 {% extends 'base.html' %}
 {% block body %}
-    <p> Meetings </p>
+    <h1> Meetings </h1>
+    <div id="body-box">
     {% for meeting in meetings %}
-        <div>
-        <br>
+        <div class="meetups-container">
         <p>Name : {{meeting.meetupName}}</p>
         <p>Owner: {{meeting.owner}}</p>
         <p>Location: {{meeting.location}}</p>
@@ -11,10 +11,10 @@
         <a href="/meeting/{{meeting._id}}">
             <button type="button" class="btn btn-dark"> Details </button>
         </a>
-        <br>
         </div>
     {% else %}
     <p> There are no meetings which matched your query</p>
     {% endfor %}
+    </div>
 
 {% endblock %}

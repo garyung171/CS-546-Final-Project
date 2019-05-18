@@ -1,10 +1,9 @@
 {% extends "base.html" %}
 
 {% block body %}
-
 <div id="body-box">
 {% for item in meetups %}
-    <div id="meetups-container">
+    <div class="meetups-container">
     <br>
     <p>Name : {{item.meetupName}}</p>
     <p>Owner: {{item.owner}}</p>
@@ -16,11 +15,8 @@
     <br>
     </div>
 {% else %}
-
-</div>
-<div id="body-box">
 <p>No current meetups.</p>
-</div>
 {% endfor %}
+</div>
 
 {% endblock %}
