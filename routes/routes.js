@@ -59,7 +59,7 @@ router.post("/login",async (req,res)=>{
         req.session.signupError = false;
         let validLogin = await checkLoginValidity(req.body.loginUsername,req.body.loginPassword);
         if(validLogin){
-            let currentUser = await userOperations.getUserByUsername(req.body.username);
+            let currentUser = await userOperations.getUserByUsername(req.body.loginUsername);
             await userOperations.addSessionToUser(currentUser,req.session.id);
             req.session.loggedIn = true;
             res.redirect("/profile/"+slugify(currentUser["username"]));
@@ -401,6 +401,15 @@ router.get("/my-meetings/:username", async(req,res)=>{
         }) != undefined;
         previousMeetings = await meetingsOperations.getUsersPreviousMeetings(currentUser["_id"],new Date());
         futureMeetings = await meetingsOperations.getUsersFutureMeetings(currentUser["_id"],new Date());
+        async function revise(meetArray){
+            for (const meeting of meetArray) {
+                let owner = await userOperations.getUserById(meeting.owner)
+                meeting.owner = owner.username;
+            }
+            return meetArray;
+        }
+        let newFutureMeetings = await revise(futureMeetings);
+        let newPreviousMeetings = await revise(previousMeetings);
         res.render("my-meetings",{futureMeetings:futureMeetings,previousMeetings:previousMeetings,loggedIn:req.session.loggedIn,userProfile:currentUser["profileAddress"]});
         return;
     }catch(e){
