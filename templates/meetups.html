@@ -2,9 +2,12 @@
 
 {% block body %}
 {% for item in meetups %}
-<!-- replace owner and attendee ids with the information about respective thing in database -->
 <p>{{item.owner}}</p>
-<p>{{item.attendees}}</p>
+{% for person in item.attendees %}
+<p>{{person}}</p>
+{% else %}
+<p>No attendees</p>
+{% endfor %}
 <p>{{item.date}}</p>
 <p>{{item.location}}</p>
 {% else %}
