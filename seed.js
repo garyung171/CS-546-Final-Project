@@ -20,8 +20,8 @@ async function main(){
         await userOperations.updatePreferences("lemon", ["Smite", "Dungeons and Dragons"]);
         let lemon = await userOperations.getUserByUsername("lemon");
         let meeting1 = await meetingsOperations.createMeeting("Smite1", detective._id, new Date(), "Hoboken", ["Smite"]);
-        await meetingsOperations.createMeeting("Dota1", detective._id, new Date(), "Hoboken", ["DotA2"]);
-        await meetingsOperations.createMeeting("Mixed", detective._id, new Date(), "Hoboken", ["Smite", "Dota"]);
+        await meetingsOperations.createMeeting("Dota1", detective._id, new Date(), "Hoboken", ["DotA 2"]);
+        await meetingsOperations.createMeeting("Mixed", detective._id, new Date(), "Hoboken", ["Smite", "DotA 2"]);
         await meetingsOperations.createMeeting("Far", detective._id, new Date(), "New York", ["Smite"]);
         await meetingsOperations.createMeeting("Lonely", lemon._id, new Date(), "Hoboken", ["Smite"]);
 
