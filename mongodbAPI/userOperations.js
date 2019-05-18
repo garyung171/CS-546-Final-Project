@@ -194,7 +194,7 @@ let getRelevantMeetings = async function(username){
         let meetings = await meetingsCollection();
         let currentUser = await users.findOne({"username":username});
         let location = currentUser.location;
-        let prefs = currentUser.preferences;
+        let prefArray = currentUser.preferences;
         let found = await meetings.find({"location" : location, "preferences" : {$in : prefArray}});
         let compare = function(a, b) {
             if(a.preferences.length < b.preferences.length){
