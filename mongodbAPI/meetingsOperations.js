@@ -55,6 +55,16 @@ let getMeetingByName = async function(name){
     }
 }
 
+let getMeetingsByName = async function(name){
+     if(!name){
+        return [];
+    }else{
+        const meetings = await meetingsCollection();
+        let found = await meetings.find({"meetupName" : name});
+        return found.toArray();
+    }
+}  
+
 let getMeetingByOwnerId = async function(ownerId){
     if(!ownerId){
         return false;
@@ -245,6 +255,7 @@ module.exports = {
     createMeeting,
     getMeetingByMeetId,
     getMeetingByName,
+    getMeetingsByName,
     getMeetingByUserId,
     getMeetingByOwnerId,
     getMeetingByLocation,

@@ -439,4 +439,19 @@ router.post("/leaveMeetup/:meetId", async(req, res) => {
     }
 })
 
+router.get("/search/", async(req,res) => {
+    try{
+        let query = req.query.query;
+        let allMatchedMeetings = await meetingsOperations.getMeetingsByName(query);
+        for(let word of query.split(" ")){
+            let matchedMeetings =  await meetingsOperations.getMeetingsByName(query);
+            allMatchedMeetings.push(...matchedMeetings);
+        }
+        res.render("search-results",{meetings:allMatchedMeetings}); 
+    }catch(e){
+        console.log(e);
+        res.sendStatus(500);
+    }
+});
+    
 module.exports = router;
