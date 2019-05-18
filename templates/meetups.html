@@ -4,7 +4,6 @@
 <div id="body-box">
 {% for item in meetups %}
     <div class="meetups-container">
-    <br>
     <p>Name : {{item.meetupName}}</p>
     <p>Owner: {{item.owner}}</p>
     <p>Location: {{item.location}}</p>
@@ -12,7 +11,6 @@
     <a href="/meeting/{{item._id}}">
         <button type="button" class="btn btn-dark"> Details </button>
     </a>
-    <br>
     </div>
 {% else %}
 <p>There are no meetups that are in your location and have any of your prefrences.</p>

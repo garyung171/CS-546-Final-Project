@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% block body %}
+<div class="container">
 <form action="/updateName" method="post" id="username">
     <label for="newName">New Username:</label>
     <input id="newName"type="text" class="form-control" placeholder="Enter new username" name="newName">
@@ -40,6 +41,7 @@
     <br>
     <button class="btn btn-dark" type="submit">Save</button>
 </form>
+</div>
 {% endblock %}
 {% block scripts %}
     <script src = "/public/js/profile-edit.js"></script>
