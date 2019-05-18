@@ -298,10 +298,10 @@ router.get("/relevantMeetups", async (req, res) => {
     try{
         let currentUser = await userOperations.getUserBySessionID(req.session.id);
         let meetings = await userOperations.getRelevantMeetings(currentUser.username);
-        meetings.forEach(async function(meetup){
-            meetup.owner = currentUser.username;
-            meetup.attendees.forEach(async function(person){
-                person = await userOperations.getUserById[person].username;
+        meetings.forEach(async function(meetup, i, arr){
+            arr[i].owner = await userOperations.getUserById[meetup.owner].username;
+            meetup.attendees.forEach(async function(person, i, arr){
+                arr[i] = await userOperations.getUserById[person].username;
             });
         });
         res.render("meetups", {
