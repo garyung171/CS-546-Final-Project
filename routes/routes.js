@@ -296,13 +296,9 @@ router.post("/create-meeting", async (req,res) =>{
 
 router.get("/relevantMeetups", async (req, res) => {
     try{
-        let currentUser = await userOperations.getUserBySessionID(req.session.id);
         let meetings = await userOperations.getRelevantMeetings(currentUser.username);
         meetings.forEach(async function(meetup, i, arr){
-            arr[i].owner = await userOperations.getUserById[meetup.owner].username;
-            meetup.attendees.forEach(async function(person, i, arr){
-                arr[i] = await userOperations.getUserById[person].username;
-            });
+            arr[i].owner = await userOperations.getUserById(meetup.owner);
         });
         res.render("meetups", {
             meetups:meetings
