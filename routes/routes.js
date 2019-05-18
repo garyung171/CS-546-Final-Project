@@ -99,7 +99,7 @@ router.post("/signup", async(req, res) =>{
 
 router.get("/profile/:username", async(req, res) => {
     try{
-        let currentUser = await userOperations.getUserByUsername(req.params.username);
+        let currentUser = await userOperations.getUserByProfileAddress(req.params.username);
         let profileOwned = currentUser["validLoginSessions"].find(function(element){
             return req.session.id === element;
         }) != undefined;
@@ -349,4 +349,20 @@ router.get("/meeting/:meetId", async (req, res) => {
     }
 
 });
+router.get("/my-meetings/:username", async(req,res)=>{
+     try{
+        let currentUser = await userOperations.getUserByProfileAddress(req.params.username);
+        let profileOwned = currentUser["validLoginSessions"].find(function(element){
+            return req.session.id === element;
+        }) != undefined;
+        previousMeetings = await meetingsOperations.getUsersPreviousMeetings(currentUser["_id"],new Date());
+        futureMeetings = await meetingsOperations.getUsersFutureMeetings(currentUser["_id"],new Date());
+        res.render("my-meetings",{futureMeetings:futureMeetings,previousMeetings:previousMeetings});
+        return;
+    }catch(e){
+        console.log(e);
+        res.sendStatus(500);
+    }
+});
+    
 module.exports = router;
