@@ -23,6 +23,14 @@
 <a href="/joinmeeting/{{meetupName}}">
     <button type="button" class="btn btn-dark"> Join </button>
 </a>
+<br>
+<form method = "post" action = "/leaveMeetup/{{meetId}}">
+    <br>
+    <button type="submit" class="btn btn-dark"> Leave </button>
+    <br>
+</form>
+
+    
 {% if joinError %}
 <p class="alert alert-danger">You are already a part of this meetup.<p>
 {% endif %}

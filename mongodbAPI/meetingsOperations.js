@@ -213,7 +213,8 @@ let leaveMeeting = async function(userId, meetId){
     if(!userId || !meetId){
         return false;
     }
-    let meeting = await getMeetingByMeetId(meetId);
+    let meetings = await meetingsCollection();
+    let meeting = await getMeetingByMeetId(ObjectID(meetId));
     if(!meeting){
         console.log("no meetings match");
         throw "Unable to find meeting"
@@ -222,17 +223,23 @@ let leaveMeeting = async function(userId, meetId){
         return false;
     }
     let attendees = meeting.attendees;
-    for(let i = 0; i<attendees.length; i++){
-        if(attendees[i] == userId){
+    let len = attendees.length;
+    for(let i = 0; i<len; i++){
+        if(attendees[i].toString() == userId.toString()){
+            console.log("deleted");
             attendees.splice(i, 1);
         }
     };
+    if(len == attendees.length){
+        return false;
+    }
     const modifiedUpdateInfo = await meetings.updateOne(
-        {"_id" : meetId},
+        {"_id" : ObjectID(meetId)},
         {$set:
             {attendees : attendees}
         }
     );
+    //console.log(modifiedUpdateInfo.modifiedCount);
     if (modifiedUpdateInfo.modifiedCount === 0){
         return false;
     }
