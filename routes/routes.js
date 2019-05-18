@@ -466,7 +466,15 @@ router.get("/search/", async(req,res) => {
                 }
             }
         }
-        res.render("search-results",{meetings:allMatchedMeetings,loggedIn:req.session.loggedIn,userProfile:currentUser["profileAddress"]}); 
+        async function revise(meetArray){
+            for (const meeting of meetArray) {
+                let owner = await userOperations.getUserById(meeting.owner)
+                meeting.owner = owner.username;
+            }
+            return meetArray;
+        }
+        let newMeetings = await revise(await allMatchedMeetings);
+        res.render("search-results",{meetings:newMeetings,loggedIn:req.session.loggedIn,userProfile:currentUser["profileAddress"]}); 
     }catch(e){
         console.log(e);
         res.sendStatus(500);
