@@ -8,9 +8,9 @@
     <p>Owner: {{item.owner}}</p>
     <p>Location: {{item.location}}</p>
     <p>Preferences: {{item.preferences}}</p>
-    <a href="/meeting/{{item._id}}">
+    <form method="get" href="/meeting/{{item._id}}">
         <button type="button" class="btn btn-dark"> Details </button>
-    </a>
+    </form>
     </div>
 {% else %}
 <p>There are no meetups that are in your location and have any of your prefrences.</p>

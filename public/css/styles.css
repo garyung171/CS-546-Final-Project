@@ -9,6 +9,11 @@ body{
     justify-content:space-around;
     flex-wrap:wrap;
 }
+#body-box2{
+    display:flex;
+    justify-content:space-around;
+    flex-wrap:wrap;
+}
 #meeting-box{
     margin-top:5%;
     margin-bottom:5%;
