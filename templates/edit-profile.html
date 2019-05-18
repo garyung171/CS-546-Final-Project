@@ -1,8 +1,8 @@
 {% extends "base.html" %}
 {% block body %}
-<form action="/updateName" method="post">
+<form action="/updateName" method="post" id="username">
     <label for="newName">New Username:</label>
-    <input type="text" class="form-control" placeholder="Enter new username" name="newName">
+    <input id="newName"type="text" class="form-control" placeholder="Enter new username" name="newName">
     <button class="btn btn-primary" type="submit">Save</button>
 </form>
 

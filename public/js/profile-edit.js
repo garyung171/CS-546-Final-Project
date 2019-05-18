@@ -15,18 +15,37 @@
             },
             "json"
         );
-        console.log(updateStatus);
         updateStatus.done(function(response){
-            console.log(response);
             if(response){
-                console.log("hello world");
                 $("#prefrenceStatus").remove();
                 $("#prefrences").append("<p id='prefrenceStatus' class='alert alert-success'>Prefrences update successfully </p>");
             }
             else{
-                if($("#prefrenceStatus").length === 0){
-                    $("#prefrences").append("<p id='prefrenceStatus' class='alert alert-danger'>Prefrences failed to update</p>");
-                } 
+                $("#prefrenceStatus").remove();
+                $("#prefrences").append("<p id='prefrenceStatus' class='alert alert-danger'>Prefrences failed to update</p>");
+            }
+        });
+        event.preventDefault();
+    });
+
+    $("#username").submit(function(e){
+        let newUsername = $("#newName").val();
+        let updateStatus = $.post(
+            "/updateName",
+            {"newName":newUsername},
+            function(response){
+                return response;
+            },
+            "json"
+        );
+        updateStatus.done(function(response){
+            if(response){
+                $("#nameStatus").remove();
+                $("#username").append("<p id='nameStatus' class='alert alert-success'>Username update successfully </p>");
+            }
+            else{
+                $("#nameStatus").remove();
+                $("#username").append("<p id='nameStatus' class='alert alert-danger'>Username failed to update</p>");
             }
         });
         event.preventDefault();

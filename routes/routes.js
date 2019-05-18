@@ -166,23 +166,25 @@ router.get("/logout", async(req, res) => {
 router.post("/updateName", async(req, res) => {
     try{
         if(req.body.newName == ""){
-            res.send("Please enter a vlid username");
+            res.send(false);
+            return;
         }else{
             let currentUser = await userOperations.getUserBySessionID(req.session.id);
             let newName = req.body.newName;
-            const usernameInDatabase = await userOpertaions.getUserByUsername(currentUser.username)["empty"] == false;
-            const profileAddressInDatabase = await userOpertaions.getUserByProfileAddress(slugify(currentUser.username))["empty"] == false;
+            const usernameInDatabase = await userOperations.getUserByUsername(currentUser.username)["empty"] == false;
+            const profileAddressInDatabase = await userOperations.getUserByProfileAddress(slugify(currentUser.username))["empty"] == false;
             if(usernameInDatabase||profileAddressInDatabase){
-                res.send("Username is taken.");
+                res.send(false);
             }
             let update = await userOperations.updateUsername(currentUser.username, newName);
-            if(update){
-                // Where are we directing after this?
+            res.send(update);
+            return;
             }
         }
-    }catch(e){
+    catch(e){
         console.log(e);
-        res.sendStatus(500);
+        res.send(false);
+        return;
     }
 });
 
