@@ -5,7 +5,7 @@ const ObjectID = require("mongodb").ObjectID;
 const slugify = require("slugify");
 
 let createMeeting = async function(meetupName,owner,date,location, preferences){
-    if(!meetingsCollection || !owner || !date || !location || !preferences){
+    if(!meetupName || !owner || !date || !location || !preferences){
         return false;
     }
     else{
