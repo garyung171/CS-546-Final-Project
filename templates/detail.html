@@ -29,7 +29,7 @@
 {% endfor %}
 </div>
 <div id="meeting-buttons">
-<form href="/joinmeeting/{{meetupName}}" method="get">
+<form action="/joinmeeting/{{meetupName}}" method="get">
     <button type="submit" class="btn btn-dark"> Join </button>
 </form>
 <form method = "post" action = "/leaveMeetup/{{meetId}}">
