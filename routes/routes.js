@@ -111,8 +111,7 @@ router.get("/profile/:username", async(req, res) => {
             profileAddress:currentUser["profileAddress"],
             preferences:currentUser.preferences,
             loggedIn:req.session.loggedIn,
-            userProfile: currentUser["username"] 
-
+            userProfile: currentUser["username"]
         });
         return;
     }catch(e){
@@ -167,77 +166,77 @@ router.get("/logout", async(req, res) => {
 router.post("/updateName", async(req, res) => {
     try{
         if(req.body.newName == ""){
-            res.send("Please enter a vlid username");
+            res.send(false);
+            return;
         }else{
             let currentUser = await userOperations.getUserBySessionID(req.session.id);
             let newName = req.body.newName;
-            const usernameInDatabase = await userOpertaions.getUserByUsername(currentUser.username)["empty"] == false;
-            const profileAddressInDatabase = await userOpertaions.getUserByProfileAddress(slugify(currentUser.username))["empty"] == false;
+            const usernameInDatabase = await userOperations.getUserByUsername(currentUser.username)["empty"] == false;
+            const profileAddressInDatabase = await userOperations.getUserByProfileAddress(slugify(currentUser.username))["empty"] == false;
             if(usernameInDatabase||profileAddressInDatabase){
-                res.send("Username is taken.");
+                res.send(false);
             }
             let update = await userOperations.updateUsername(currentUser.username, newName);
-            if(update){
-                // Where are we directing after this?
+            res.send(update);
+            return;
             }
         }
-    }catch(e){
+    catch(e){
         console.log(e);
-        res.sendStatus(500);
+        res.send(false);
+        return;
     }
 });
 
 router.post("/updatePassword", async(req, res) =>{
     try{
         if(req.body.newPassword == ""){
-            res.send("Please enter a valid password.");
+            res.send(false);
+            return;
         }else{
             let currentUser = await userOperations.getUserBySessionID(req.session.id);
             let newPassword = await bcrypt.hash(req.body.newPassword, saltRounds);
             let update = await userOperations.updatePassword(currentUser.username, newPassword);
-            if(update){
-                // Where are we directing after this?
-            }
+            res.send(update);
+            return;
         }
     }catch(e){
         console.log(e);
-        res.sendStatus(500);
+        res.send(false);
+        return;
     }
 });
 
 router.post("/updateLocation", async(req, res) =>{
     try{
         if(req.body.newLocation == ""){
-            res.send("Please enter a valid location.");
+            res.send(false);
         }else{
             let currentUser = await userOperations.getUserBySessionID(req.session.id);
             let newLocation = req.body.newLocation;
             let update = await userOperations.updateLocation(currentUser.username, newLocation);
-            if(update){
-                // Where are we directing after this?
-            }
+            res.send(update);
         }
     }catch(e){
         console.log(e);
-        res.sendStatus(500);
+        res.send(false);
     }
 });
 
 router.post("/updateEmail", async(req,res) => {
     try{
         if(req.body.newEmail == ""){
-            res.send("Please enter a valid email.");
+            res.send(false);
+            return;
         }else{
             let currentUser = await userOperations.getUserBySessionID(req.session.id);
             let newEmail = req.body.newEmail;
             let update = await userOperations.updateEmail(currentUser.username, newEmail);
-            if(update){
-                // Where are we directing after this?
-            }
+            res.send(update);
         }
     }catch(e){
         console.log(e);
-        res.sendStatus(500);
+        res.send(false);
     }
 });
 
@@ -293,12 +292,14 @@ router.post("/create-meeting", async (req,res) =>{
         res.sendStatus(500);
     }
 });
-    
+
 router.get("/relevantMeetups", async (req, res) => {
     try{
         let currentUser = await userOperations.getUserBySessionID(req.session.id);
         let meetings = await userOperations.getRelevantMeetings(currentUser.username);
-        //res.render() using meetings as the list of ordered meetups by popularity.
+        res.render("meetups", {
+            meetups:meetings
+        });
     }catch(e){
         console.log(e);
         res.sendStatus(500);

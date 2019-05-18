@@ -1,24 +1,24 @@
 {% extends "base.html" %}
 {% block body %}
-<form action="/updateName" method="post">
+<form action="/updateName" method="post" id="username">
     <label for="newName">New Username:</label>
-    <input type="text" class="form-control" placeholder="Enter new username" name="newName">
+    <input id="newName"type="text" class="form-control" placeholder="Enter new username" name="newName">
     <button class="btn btn-primary" type="submit">Save</button>
 </form>
 
-<form action="/updatePassword" method="post">
+<form action="/updatePassword" method="post" id="password">
     <label for="newPassword">New Password:</label>
-    <input type="text" class="form-control" placeholder="Enter new password" name="newPassword">
+    <input type="text" class="form-control" placeholder="Enter new password" name="newPassword" id="newPassword">
     <button class="btn btn-primary" type="submit">Save</button>
 </form>
-<form action="/updateLocation" method="post">
+<form action="/updateLocation" method="post" id="location">
     <label for="newLocation">New Location:</label>
-    <input type="text" class="form-control" placeholder="Enter new location" name="newLocation">
+    <input type="text" class="form-control" placeholder="Enter new location" name="newLocation" id="newLocation">
     <button class="btn btn-primary" type="submit">Save</button>
 </form>
-<form action="/updateEmail" method="post">
+<form action="/updateEmail" method="post" id="email">
     <label for="newLocation">New Email:</label>
-    <input type="text" class="form-control" placeholder="Enter new email" name="newEmail">
+    <input type="text" class="form-control" placeholder="Enter new email" name="newEmail" id="newEmail">
     <button class="btn btn-primary" type="submit">Save</button>
 </form>
 <form action="/updatePreferences" method="post" id="prefrences">
