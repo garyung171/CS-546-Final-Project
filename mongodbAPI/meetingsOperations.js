@@ -159,14 +159,14 @@ let getUsersPreviousMeetings = async function(id,date){
     }
 }
 
-let updateMeetingAttendees = async function(meetId, userId){
-    if(!meetId || !userId){
+let updateMeetingAttendees = async function(meetId, user){
+    if(!meetId || !user){
         return false;
     }else{
         const meetings = await meetingsCollection();
-        const users = await usersCollection();
+        // const users = await usersCollection();
         let meeting = await getMeetingByMeetId(meetId);
-        let user = await users.getUserById(userId);
+        // let user = await users.getUserById(userId);
         let attendees = meeting.attendees;
         // logic to check if user is already in attendees but it's 4 am
         attendees.push(user._id);
@@ -214,5 +214,6 @@ module.exports = {
     getFutureMeetings,
     getUsersPreviousMeetings,
     getUsersFutureMeetings,
-    updateMeetingsComments
+    updateMeetingsComments,
+    updateMeetingAttendees
 }

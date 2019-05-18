@@ -306,7 +306,7 @@ router.get("/joinmeeting/:meetingName", async (req, res) =>{
     try{
         let currentUser = await userOperations.getUserBySessionID(req.session.id);
         let meeting = await meetingsOperations.getMeetingByName(req.params.meetingName);
-        let joined = await meetingOperations.updateMeetingAttendees(meeting._id, currentUser._id);
+        let joined = await meetingsOperations.updateMeetingAttendees(meeting._id, currentUser);
         if(!joined){
             req.session.joinError = true;
         }

@@ -3,9 +3,11 @@
 {% block body %}
 {% for item in meetups %}
 <div>
-<p>{{item.meetupName}}</p>
-<p>{{item.owner}}</p>
-<p>{{item.location}}</p>
+<p>Name : {{item.meetupName}}</p>
+<p>Owner: {{item.owner}}</p>
+<p>Location: {{item.location}}</p>
+<p>Preferences: {{item.preferences}}</p>
+<br>
 </div>
 {% else %}
 <p>No current meetups.</p>
