@@ -302,9 +302,10 @@ router.post("/create-meeting", async (req,res) =>{
 
 router.get("/relevantMeetups", async (req, res) => {
     try{
+        let currentUser = await userOperations.getUserBySessionID(req.session.id);
         let meetings = await userOperations.getRelevantMeetings(currentUser.username);
-        meetings.forEach(async function(meetup, i, arr){
-            arr[i].owner = await userOperations.getUserById(meetup.owner);
+        meetings.forEach(meeting => {
+            meeting.owner = await userOperations.getUserById(meetup.owner);
         });
         res.render("meetups", {
             meetups:meetings
