@@ -330,5 +330,5 @@ router.get("/detailedView:meetId", async (req, res) => {
         res.sendStatus(500);
     }
 
-})
+});
 module.exports = router;
