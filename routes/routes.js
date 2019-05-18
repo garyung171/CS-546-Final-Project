@@ -362,5 +362,37 @@ router.get("/my-meetings/:username", async(req,res)=>{
         res.sendStatus(500);
     }
 });
+
+router.get("/comments:meetId", async(req, res) => {
+    try{
+        let meeting = await meetingsOperations.getMeetingByMeetId(req.params.meetId);
+        let comments = meeting.comments;
+        //render to page with comment fields
+    }catch(e){
+        console.log(e);
+        res.sendStatus(500);
+    }
+});
+
+router.post("/comments:meetId", async (req, res) => {
+    try{
+        let meeting = await meetingsOperations.getMeetingByMeetId(req.params.meetId);
+        let user = await userOperations.getUserBySessionID(req.session.id);
+        // Not sure how to properly set _id
+        let comment = {
+            "_id": meeting.comments.length + 1,
+            "postBy" : user._id,
+            "date" : new Date(req.body.date),
+            "text" : req.body.comment
+        }
+        let update = await meetingsOperations.updateMeetingComments(req.params.meetId, comment);
+        res.send(update);
+        return;
+    }catch(e){
+        console.log(e);
+        res.send(false);
+        return;
+    }
+})
     
 module.exports = router;

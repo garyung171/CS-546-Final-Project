@@ -144,6 +144,27 @@ let getMeetingByMeetId = async function(meetId){
     }
 }
 
+let updateMeetingsComments = async function(meetId, comment){
+    if(!meetId || !comment){
+        return false;
+    }else{
+        const meetings = await meetingsCollection();
+        let meeting = await getMeetingByMeetId(meetId);
+        let comments = meeting.comments;
+        comments.push(comment);
+        const modifiedUpdateInfo = await meetings.updateOne(
+            {"_id" : meetId},
+            {$set:
+                {"comments" : comments}
+            }
+        );
+        if (modifiedUpdateInfo.modifiedCount === 0){
+            return false;
+        }
+        return true;
+    }
+}
+
 module.exports = {
     createMeeting,
     getMeetingByUserId,
@@ -154,5 +175,6 @@ module.exports = {
     getFutureMeetings,
     getUsersPreviousMeetings,
     getUsersFutureMeetings,
-    getMeetingByMeetId
+    getMeetingByMeetId,
+    updateMeetingsComments
 }
