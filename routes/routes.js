@@ -6,7 +6,8 @@ const slugify = require("slugify");
 const userOperations = require("../mongodbAPI/userOperations");
 const meetingsOperations = require("../mongodbAPI/meetingsOperations");
 const saltRounds = 8;
-const ObjectID = require("mongodb").ObjectID
+const ObjectID = require("mongodb").ObjectID;
+
 let checkArraysHaveSameItems = function(arr1,arr2){
     if(arr1.length !== arr2.length){
         return false;
@@ -301,6 +302,22 @@ router.post("/create-meeting", async (req,res) =>{
     }
 });
 
+router.get("/joinmeeting/:meetingName", async (req, res) =>{
+    try{
+        let currentUser = await userOperations.getUserBySessionID(req.session.id);
+        let meeting = await meetingsOperations.getMeetingByName(req.params.meetingName);
+        let joined = await meetingOperations.updateMeetingAttendees(meeting._id, currentUser._id);
+        if(!joined){
+            req.session.joinError = true;
+        }
+        res.redirect("/meeting/"+meeting._id);
+        return;
+    }catch(e){
+        console.log(e);
+        res.sendStatus(500);
+    }
+});
+
 router.get("/relevantMeetups", async (req, res) => {
     try{
         let currentUser = await userOperations.getUserBySessionID(req.session.id);
@@ -339,14 +356,14 @@ router.get("/meeting/:meetId", async (req, res) => {
         let location = meetup.location;
         let comments = meetup.comments;
         let preferences = meetup.preferences;
-        res.render("detail", {meetupName: meetupName, owner: ownerName, attendees: attendeesNames, date: date, location: location, comments: comments, preferences: preferences});
+        res.render("detail", {meetupName: meetupName, owner: ownerName, attendees: attendeesNames, date: date, location: location, comments: comments, preferences: preferences, joinError:req.session.joinError ? true : false});
         return;
     }catch(e){
         console.log(e);
         res.sendStatus(500);
     }
-
 });
+
 router.get("/my-meetings/:username", async(req,res)=>{
      try{
         let currentUser = await userOperations.getUserByProfileAddress(req.params.username);
@@ -393,6 +410,6 @@ router.post("/comments:meetId", async (req, res) => {
         res.send(false);
         return;
     }
-})
-    
+});
+
 module.exports = router;

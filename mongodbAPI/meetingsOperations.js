@@ -14,26 +14,53 @@ let createMeeting = async function(meetupName,owner,date,location, preferences){
         let meeting = {
                         meetupName:meetupName,
                         owner:owner,
-                        attendees:[owner], 
+                        attendees:[owner],
                         date:date,
                         location:location,
                         preferences: preferences,
                         comments:[]
-                    } 
+                    }
         const insertInfo = await meetings.insertOne(meeting);
         if(insertInfo.insertedCount === 0){
             throw "Unable to create user."
         }
         return insertInfo.insertedId;
     }
-} 
+}
+
+let getMeetingByMeetId = async function(meetId){
+    if(!meetId){
+        return false;
+    }else{
+        const meetings = await meetingsCollection();
+        let found = meetings.findOne({"_id" : meetId});
+        if (found === null){
+            return {"empty" : true};
+        }
+        return found;
+    }
+}
+
+
+let getMeetingByName = async function(name){
+    if(!name){
+        return false;
+    }else{
+        const meetings = await meetingsCollection();
+        let found = await meetings.findOne({"meetupName" : name});
+        if(found === null){
+            return {"empty" : true};
+        }
+        return found;
+    }
+}
 
 let getMeetingByOwnerId = async function(ownerId){
     if(!ownerId){
         return false;
     }else{
         const meetings = await meetingsCollection();
-        const found = await meetings.findOne({"owner" : ownerId});
+        let found = await meetings.findOne({"owner" : ownerId});
         if(found === null){
             return {"empty" : true};
         }
@@ -131,16 +158,26 @@ let getUsersPreviousMeetings = async function(id,date){
         return found.toArray();
     }
 }
-let getMeetingByMeetId = async function(meetId){
-    if(!meetId){
+
+let updateMeetingAttendees = async function(meetId, userId){
+    if(!meetId || !userId){
         return false;
     }else{
         const meetings = await meetingsCollection();
-        let found = meetings.findOne({"_id" : meetId});
-        if (found === null){
-            return {"empty" : true};
+        const users = await usersCollection();
+        let meeting = await getMeetingByMeetId(meetId);
+        let user = await users.getUserById(userId);
+        let attendees = meeting.attendees;
+        // logic to check if user is already in attendees but it's 4 am
+        attendees.push(user._id);
+        const modifiedUpdateInfo = await meetings.updateOne(
+            {"_id" : meetId},
+            {$set: {"attendees" : attendees}}
+        );
+        if (modifiedUpdateInfo.modifiedCount === 0){
+            return false;
         }
-        return found;
+        return true;
     }
 }
 
@@ -167,6 +204,8 @@ let updateMeetingsComments = async function(meetId, comment){
 
 module.exports = {
     createMeeting,
+    getMeetingByMeetId,
+    getMeetingByName,
     getMeetingByUserId,
     getMeetingByOwnerId,
     getMeetingByLocation,
@@ -175,6 +214,5 @@ module.exports = {
     getFutureMeetings,
     getUsersPreviousMeetings,
     getUsersFutureMeetings,
-    getMeetingByMeetId,
     updateMeetingsComments
 }
