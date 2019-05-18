@@ -115,9 +115,10 @@ let updateSessions = async function(username, array){
 
 let updateUsername = async function(username, newName){
     const users = await usersCollection();
-    const modifiedUpdateInfo = await users.updateOne({"username": username},
+    const modifiedUpdateInfo = await users.updateOne({"username": username,},
     {$set:
-        { "username" : newName}
+        { "username" : newName,"profileAddress":slugify(newName)}
+
     });
     if(modifiedUpdateInfo.modifiedCount === 0){
         throw "Could not update user.";
