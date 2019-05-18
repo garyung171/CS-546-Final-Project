@@ -26,7 +26,7 @@ let getUserById = async function(id){
         id = ObjectID(id);
     }
     const users = await usersCollection();
-    const user = await users.find({"_id":id});
+    const user = await users.findOne({"_id":id});
     if(user === null){
         return {empty:true};
     }

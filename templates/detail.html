@@ -3,7 +3,12 @@
 <p> Name: {{meetupName}} </p>
 <p> Preferences: {{preferences}}</p>
 <p> Owner: {{owner}}</p>
-<p> Attendees: {{attendees}}</p>
+<p> Attendees: </p>
+{% for attendee in attendees %}
+    <li> {{attendee}} </li>
+{% else %}
+    <p> There are no Attendees </p>
+{% endfor %}
 <p> Date: {{date}}</p>
 <p> Location: {{location}} </p>
 <p> Comments : {{comments}}</p> 

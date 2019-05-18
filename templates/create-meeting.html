@@ -1,12 +1,12 @@
 {% extends 'base.html' %}
 {% block body %}
     <form id="meeting-creation-form" method="post" action="/create-meeting">
-        <label for="meetupName">Meetup Name</label>
+        <label for="meetupName">Meetup Name:</label>
         <input id = "meetupName" name="meetupName" class="form-control" placeholder="Enter Meetup Name">
-        <label for="date">Meetup Date</label>
+        <label for="date">Meetup Date (In UTC):</label>
         <input id = "date" name="date" class="form-control" type="date">
-        <label for="meetupName">Meetup Location</label>
-        <input id = "meetupLocation" name="meetupLocation" class="form-control" placeholder="Enter Meetup Location">
+        <label for="location">Meetup Location:</label>
+        <input id = "location" name="location" class="form-control" placeholder="Enter Meetup Location">
         <p>Choose Preferences</p>
         <input type="checkbox" name="preferences" id="dnd" value="DnD">
         <label for="dnd">Dungeons and Dragons</label>
