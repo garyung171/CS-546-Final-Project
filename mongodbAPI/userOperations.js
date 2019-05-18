@@ -123,15 +123,16 @@ let updateUsername = async function(username, newName){
     }
     return true;
 }
-
 let updatePassword = async function(username, newPassword){
     const users = await usersCollection();
-    const modifiedUpdateInfo = await users.updateOne({"username": username},
-    {$set:
-        {"password" : newPassword}
-    });
+    const modifiedUpdateInfo = await users.updateOne(
+        {"username": username},
+        {$set:
+            {"password" : newPassword}
+        }
+    );
     if(modifiedUpdateInfo.modifiedCount === 0){
-        throw "Could not update user.";
+        return false;
     }
     return true;
 }
@@ -155,7 +156,7 @@ let updateEmail = async function(username, newEmail){
         {"email" : newEmail}
     });
     if(modifiedUpdateInfo.modifiedCount === 0){
-        throw "Could not update user.";
+        return false;
     }
     return true;
 }
