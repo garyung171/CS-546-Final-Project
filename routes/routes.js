@@ -309,7 +309,7 @@ router.get("/relevantMeetups", async (req, res) => {
             meetings[i].owner = await userOperations.getUserById(meetings[i].owner).username;
         }
         res.render("meetups", {
-            meetups:meetings
+            meetups: await meetings.toArray()
         });
     }catch(e){
         console.log(e);
