@@ -1,9 +1,9 @@
 {% extends 'base.html' %}
 {% block body %}
-<p>Future Meetings</p>
+<h1>Future Meetings</h1>
+<div id="body-box">
 {% for meeting in futureMeetings %}
-<div>
-<br>
+<div class="meetups-container">
 <p>Name : {{meeting.meetupName}}</p>
 <p>Owner: {{meeting.owner}}</p>
 <p>Location: {{meeting.location}}</p>
@@ -11,16 +11,15 @@
 <a href="/meeting/{{meeting._id}}">
     <button type="button" class="btn btn-dark"> Details </button>
 </a>
-<br>
 </div>
-
 {% else %}
-<p> There are no upcomming meetings</p>
+<p> There are no upcoming meetings </p>
 {% endfor %}
-<p>Prior Meetings</p>
+</div>
+<h1>Prior Meetings</h1>
+<div id="body-box">
 {% for meeting in previousMeetings %}
-<div>
-<br>
+<div class="meetups-container">
 <p>Name : {{meeting.meetupName}}</p>
 <p>Owner: {{meeting.owner}}</p>
 <p>Location: {{meeting.location}}</p>
@@ -28,9 +27,9 @@
 <a href="/meeting/{{meeting._id}}">
     <button type="button" class="btn btn-dark"> Details </button>
 </a>
-<br>
 </div>
 {% else %}
 <p> There are no prior meetups </p>
 {% endfor %}
+</div>
 {% endblock %}
