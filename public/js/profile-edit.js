@@ -46,7 +46,7 @@
                 $("#nameStatus").remove();
                 $("#username").append("<p id='nameStatus' class='alert alert-success'>Username update successfully </p>");
                 $("#profilePageNav").attr("href","/profile/"+slugify(newUsername));
-                $("#meetingsPageNav").attr("href","/meetings/"+slugify(newUsername));
+                $("#meetingsPageNav").attr("href","/my-meetings/"+slugify(newUsername));
 
             }
             else{
