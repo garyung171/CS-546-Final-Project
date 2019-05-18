@@ -106,6 +106,31 @@ let getPreviousMeetings = async function(date){
     }
 }
 
+let getUsersFutureMeetings = async function(id,date){
+    if(!date){
+        return false;
+    }else{
+        const meetings = await meetingsCollection();
+        let found = await meetings.find({"attendees":id,"date" : {$gte : date}});
+        if(found === null){
+            return {"empty" : true};
+        }
+        return found.toArray();
+    }
+}
+
+let getUsersPreviousMeetings = async function(id,date){
+    if(!date){
+        return false;
+    }else{
+        const meetings = await meetingsCollection();
+        let found = await meetings.find({"attendees":id,"date" : {$lt : date}});
+        if(found === null){
+            return {"empty" : true};
+        }
+        return found.toArray();
+    }
+}
 let getMeetingByMeetId = async function(meetId){
     if(!meetId){
         return false;
@@ -127,5 +152,7 @@ module.exports = {
     getMeetingByPreferences,
     getPreviousMeetings,
     getFutureMeetings,
+    getUsersPreviousMeetings,
+    getUsersFutureMeetings,
     getMeetingByMeetId
 }

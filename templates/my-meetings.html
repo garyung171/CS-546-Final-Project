@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block body %}
+<p>Future Meetings</p>
+<ul>
+{% for meeting in futureMeetings %}
+    <li> {{meeting.meetupName}}</li>
+
+{% else %}
+<p> There are no upcomming meetings</p>
+{% endfor %}
+</ul>
+<p>Prior Meetings</p>
+<ul>
+{% for meeting in previousMeetings %}
+    <li> {{meeting.meetupName}}</li>
+{% else %}
+<p> There are no prior meetups </p>
+{% endfor %}
+</ul>
+{% endblock %}
