@@ -64,6 +64,15 @@ let getMeetingsByName = async function(name){
         return found.toArray();
     }
 }  
+let getMeetingsByRegex = async function(regex){
+     if(!regex){
+        return [];
+    }else{
+        const meetings = await meetingsCollection();
+        let found = await meetings.find({"meetupName" :{$regex: regex}});
+        return found.toArray();
+    }
+}  
 
 let getMeetingByOwnerId = async function(ownerId){
     if(!ownerId){
@@ -256,6 +265,7 @@ module.exports = {
     getMeetingByMeetId,
     getMeetingByName,
     getMeetingsByName,
+    getMeetingsByRegex,
     getMeetingByUserId,
     getMeetingByOwnerId,
     getMeetingByLocation,
