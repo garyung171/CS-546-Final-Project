@@ -1,13 +1,13 @@
 (function($){ 
-    $("#prefrences").submit(function(e){
+    $("#preferences").submit(function(e){
         let inputArray = $(this).find(":input[type=checkbox]");
-        let newPrefrences = []; for(let i = 0; i < inputArray.length; ++i){ if($(inputArray[i]).prop("checked")){
-                newPrefrences.push($(inputArray[i]).val());
+        let newPreferences = []; for(let i = 0; i < inputArray.length; ++i){ if($(inputArray[i]).prop("checked")){
+                newPreferences.push($(inputArray[i]).val());
             }
         }
         var updateStatus = $.post(
             "/updatePreferences",
-            {"prefrences[]":(newPrefrences.length !== 0) ? newPrefrences : [""]},
+            {"preferences[]":(newPreferences.length !== 0) ? newPreferences : [""]},
             function(data){
             return data;
             },
@@ -15,12 +15,12 @@
         );
         updateStatus.done(function(response){
             if(response){
-                $("#prefrenceStatus").remove();
-                $("#prefrences").append("<p id='prefrenceStatus' class='alert alert-success'>Prefrences update successfully </p>");
+                $("#preferenceStatus").remove();
+                $("#preferences").append("<p id='preferenceStatus' class='alert alert-success'>Preferences update successfully </p>");
             }
             else{
-                $("#prefrenceStatus").remove();
-                $("#prefrences").append("<p id='prefrenceStatus' class='alert alert-danger'>Prefrences failed to update</p>");
+                $("#preferenceStatus").remove();
+                $("#preferences").append("<p id='preferenceStatus' class='alert alert-danger'>Preferences failed to update</p>");
             }
         });
         event.preventDefault();

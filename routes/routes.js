@@ -248,7 +248,7 @@ router.post("/updatePreferences", async (req, res) => {
             return;
         }else{
             let currentUser = await userOperations.getUserBySessionID(req.session.id);
-            let preferences = (checkArraysHaveSameItems(req.body["preferences"],[""])) ? [] : req.body["prefrences"];
+            let preferences = (checkArraysHaveSameItems(req.body["preferences"],[""])) ? [] : req.body["preferences"];
             let update = await userOperations.updatePreferences(currentUser.username, preferences);
             res.send(update);
             return;
