@@ -422,4 +422,21 @@ router.post("/comments/:meetId", async (req, res) => {
     }
 });
 
+router.post("/leaveMeetup/:meetId", async(req, res) => {
+    try{
+        let currentUser = await userOperations.getUserBySessionID(req.session.id);
+        let userId = currentUser._id;
+        let update = await meetingsOperations.leaveMeeting(userId, req.params.meetId);
+        if(!update){
+            throw "Unable to leave meetup";
+        }
+        res.redirect("/meeting/"+req.params.meetId);
+        return;
+    }catch(e){
+        console.log(e);
+        res.sendStatus(500);
+        return;
+    }
+})
+
 module.exports = router;

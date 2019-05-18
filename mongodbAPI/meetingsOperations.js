@@ -209,6 +209,38 @@ let updateMeetingsComments = async function(meetId, comment){
     }
 }
 
+let leaveMeeting = async function(userId, meetId){
+    if(!userId || !meetId){
+        return false;
+    }
+    let meeting = await getMeetingByMeetId(meetId);
+    if(!meeting){
+        console.log("no meetings match");
+        throw "Unable to find meeting"
+    }
+    if(meeting.owner == userId){
+        return false;
+    }
+    let attendees = meeting.attendees;
+    for(let i = 0; i<attendees.length; i++){
+        if(attendees[i] == userId){
+            attendees.splice(i, 1);
+        }
+    };
+    const modifiedUpdateInfo = await meetings.updateOne(
+        {"_id" : meetId},
+        {$set:
+            {attendees : attendees}
+        }
+    );
+    if (modifiedUpdateInfo.modifiedCount === 0){
+        return false;
+    }
+    return true;
+
+}
+
+
 module.exports = {
     createMeeting,
     getMeetingByMeetId,
@@ -222,5 +254,6 @@ module.exports = {
     getUsersPreviousMeetings,
     getUsersFutureMeetings,
     updateMeetingsComments,
-    updateMeetingAttendees
+    updateMeetingAttendees,
+    leaveMeeting
 }
