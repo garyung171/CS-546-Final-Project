@@ -79,8 +79,8 @@ let createUser = async function(username, password, location, email){
         return false;
     }else{
         const users = await usersCollection();
-        const usernameInDatabase = await getUserByUsername(username)["empty"] == false;
-        const profileAddressInDatabase = await getUserByProfileAddress(slugify(username))["empty"] == false;
+        const usernameInDatabase = await getUserByUsername(username)["empty"] == undefined;
+        const profileAddressInDatabase = await getUserByProfileAddress(slugify(username))["empty"] == undefined;
         if(usernameInDatabase||profileAddressInDatabase){
             return false;
         } 
