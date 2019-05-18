@@ -238,10 +238,13 @@ let leaveMeeting = async function(userId, meetId){
         console.log("no meetings match");
         throw "Unable to find meeting"
     }
-    if(meeting.owner == userId){
+    if(meeting.owner.toString() == userId.toString()){
         return false;
     }
     let attendees = meeting.attendees;
+    if(meeting.attendees.length == 0){
+        return false;
+    }
     let len = attendees.length;
     for(let i = 0; i<len; i++){
         if(attendees[i].toString() == userId.toString()){

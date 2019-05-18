@@ -350,6 +350,7 @@ router.get("/relevantMeetups", async (req, res) => {
 
 router.get("/meeting/:meetId", async (req, res) => {
     try{
+        let currentUser = await userOperations.getUserBySessionID(req.session.id);
         let meetId = ObjectID(req.params.meetId);
         let meetup = await meetingsOperations.getMeetingByMeetId(meetId);
         if(meetup["empty"] === false){
@@ -375,11 +376,16 @@ router.get("/meeting/:meetId", async (req, res) => {
         }
         let preferences = meetup.preferences;
         let joinError = false;
+        let leaveError = false;
         if(req.session.joinError){
             joinError = true 
             req.session.joinError = false;
         }
-        res.render("detail", {meetId:meetId,meetupName: meetupName, owner: ownerName, attendees: attendeesNames, date: date, location: location, comments: comments, preferences: preferences, joinError:joinError,loggedIn:req.session.loggedIn});
+        if(req.session.leaveError){
+            leaveError = true;
+            req.session.leaveError = false;
+        }
+        res.render("detail", {meetId:meetId,meetupName: meetupName, owner: ownerName, attendees: attendeesNames, date: date, location: location, comments: comments, preferences: preferences, joinError:joinError,loggedIn:req.session.loggedIn,leaveError:leaveError,userProfile:currentUser["profileAddress"]});
         return;
     }catch(e){
         console.log(e);
@@ -433,7 +439,7 @@ router.post("/leaveMeetup/:meetId", async(req, res) => {
         let userId = currentUser._id;
         let update = await meetingsOperations.leaveMeeting(userId, req.params.meetId);
         if(!update){
-            throw "Unable to leave meetup";
+            req.session.leaveError = true;;
         }
         res.redirect("/meeting/"+req.params.meetId);
         return;

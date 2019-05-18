@@ -1,4 +1,9 @@
 (function($){ 
+    function slugify(Text)
+    {
+        return Text.toLowerCase().replace(/ /g,'-').replace(/[^\w-]+/g,'');
+    }
+
     $("#preferences").submit(function(e){
         let inputArray = $(this).find(":input[type=checkbox]");
         let newPreferences = []; for(let i = 0; i < inputArray.length; ++i){ if($(inputArray[i]).prop("checked")){
@@ -40,6 +45,9 @@
             if(response){
                 $("#nameStatus").remove();
                 $("#username").append("<p id='nameStatus' class='alert alert-success'>Username update successfully </p>");
+                $("#profilePageNav").attr("href","/profile/"+slugify(newUsername));
+                $("#meetingsPageNav").attr("href","/meetings/"+slugify(newUsername));
+
             }
             else{
                 $("#nameStatus").remove();
