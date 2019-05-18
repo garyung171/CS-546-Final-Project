@@ -1,4 +1,5 @@
-const meetingsCollection = require("./getCollections").meetings
+const meetingsCollection = require("./getCollections").meetups;
+const usersCollection = require("./getCollections").users;
 const connection = require("./establishConnection");
 const ObjectID = require("mongodb").ObjectID;
 const slugify = require("slugify");

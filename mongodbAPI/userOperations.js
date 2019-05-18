@@ -1,4 +1,5 @@
 const usersCollection = require("./getCollections").users
+const meetingsCollection = require("./getCollections").meetups;
 const connection = require("./establishConnection");
 const ObjectID = require("mongodb").ObjectID;
 const slugify = require("slugify");
@@ -184,6 +185,30 @@ let updatePreferences = async function(username, prefArray){
     
 }
 
+let getRelevantMeetings = async function(username){
+    if(!username){
+        return false;
+    }else{
+        let users = await usersCollection();
+        let meetings = await meetingsCollection();
+        let currentUser = await users.findOne({"username":username});
+        let location = currentUser.location;
+        let prefs = currentUser.preferences;
+        let found = await meetings.find({"location" : location, "preferences" : {$in : prefArray}});
+        let compare = function(a, b) {
+            if(a.preferences.length < b.preferences.length){
+                return 1;
+            }
+            if(a.preferences.length > b.preferences.length){
+                return -1;
+            }
+            return 0;
+        }
+        found.sort(compare);
+        return found;
+    }
+}
+
 module.exports = {
     getAllUsers,
     getUserByUsername,
@@ -197,5 +222,6 @@ module.exports = {
     updatePassword,
     updateLocation,
     updateEmail,
-    updatePreferences
+    updatePreferences,
+    getRelevantMeetings
 }

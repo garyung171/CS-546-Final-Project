@@ -281,5 +281,14 @@ router.post("/create-meeting", async (req,res) =>{
     }
 });
     
-
+router.get("/relevantMeetups", async (req, res) => {
+    try{
+        let currentUser = await userOperations.getUserBySessionID(req.session.id);
+        let meetings = await userOperations.getRelevantMeetings(currentUser.username);
+        //res.render() using meetings as the list of ordered meetups by popularity.
+    }catch(e){
+        console.log(e);
+        res.sendStatus(500);
+    }
+})
 module.exports = router;
