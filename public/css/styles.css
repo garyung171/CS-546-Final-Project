@@ -9,6 +9,16 @@ body{
     justify-content:space-around;
     flex-wrap:wrap;
 }
+#meeting-box{
+    margin-top:5%;
+    margin-bottom:5%;
+    display:flex;
+    justify-content:space-around;
+    flex-wrap:wrap;
+    padding:2%;
+    width:80%;
+    box-shadow:0px 0px 5px black;
+}
 #homeNav{
     color:white;
 }
@@ -62,7 +72,21 @@ body{
     height:500px;
     width:500px;
 }
+.comment-container{
+    width:100%;
+    border:2px solid black;
+    border-radius:5px;
+    padding:5%;
+    margin-bottom:2%;
 
+}
+#meeting-buttons{
+    display:flex;
+    justify-content:space-around;
+}
+.comment{
+    border-bottom:1px solid black;
+}
 @media only screen and (max-width: 700px) {
     .container{
         width:100%;

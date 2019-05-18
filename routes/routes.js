@@ -133,7 +133,7 @@ router.get("/edit-profile/:profileAddress", async (req, res) => {
             return;
         }
         res.render("edit-profile",{
-            title: "Edit Profile",
+            title: "Edit-Profile",
             loggedIn: req.session.loggedIn,
             userProfile: currentUser["profileAddress"]
         });
@@ -270,7 +270,7 @@ router.post("/updatePreferences", async (req, res) => {
 router.get("/create-meeting", async(req,res) =>{
     try{
         let currentUser = await userOperations.getUserBySessionID(req.session.id);
-        res.render("create-meeting",{createError:req.session.createError ? true : false,loggedIn:req.session.loggedIn,userProfile:currentUser["profileAddress"]});
+        res.render("create-meeting",{title:"Create-Meeting",createError:req.session.createError ? true : false,loggedIn:req.session.loggedIn,userProfile:currentUser["profileAddress"]});
     }
     catch(e){
         console.log(e);
@@ -338,6 +338,7 @@ router.get("/relevantMeetups", async (req, res) => {
         }
         let newMeetings = await revise(await meetings.toArray());
         res.render("meetups", {
+            title:"meetups",
             meetups: await newMeetings,
             loggedIn:req.session.loggedIn,
             userProfile:currentUser["profileAddress"]
@@ -385,7 +386,7 @@ router.get("/meeting/:meetId", async (req, res) => {
             leaveError = true;
             req.session.leaveError = false;
         }
-        res.render("detail", {meetId:meetId,meetupName: meetupName, owner: ownerName, attendees: attendeesNames, date: date, location: location, comments: comments, preferences: preferences, joinError:joinError,loggedIn:req.session.loggedIn,leaveError:leaveError,userProfile:currentUser["profileAddress"]});
+        res.render("detail", {title:meetupName,meetId:meetId,meetupName: meetupName, owner: ownerName, attendees: attendeesNames, date: date, location: location, comments: comments, preferences: preferences, joinError:joinError,loggedIn:req.session.loggedIn,leaveError:leaveError,userProfile:currentUser["profileAddress"]});
         return;
     }catch(e){
         console.log(e);
@@ -410,7 +411,7 @@ router.get("/my-meetings/:username", async(req,res)=>{
         }
         let newFutureMeetings = await revise(futureMeetings);
         let newPreviousMeetings = await revise(previousMeetings);
-        res.render("my-meetings",{futureMeetings:futureMeetings,previousMeetings:previousMeetings,loggedIn:req.session.loggedIn,userProfile:currentUser["profileAddress"]});
+        res.render("my-meetings",{title:"My-Meetings",futureMeetings:futureMeetings,previousMeetings:previousMeetings,loggedIn:req.session.loggedIn,userProfile:currentUser["profileAddress"]});
         return;
     }catch(e){
         console.log(e);
@@ -483,7 +484,7 @@ router.get("/search/", async(req,res) => {
             return meetArray;
         }
         let newMeetings = await revise(await allMatchedMeetings);
-        res.render("search-results",{meetings:newMeetings,loggedIn:req.session.loggedIn,userProfile:currentUser["profileAddress"]}); 
+        res.render("search-results",{title:"Search Results",meetings:newMeetings,loggedIn:req.session.loggedIn,userProfile:currentUser["profileAddress"]}); 
     }catch(e){
         console.log(e);
         res.sendStatus(500);

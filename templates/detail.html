@@ -1,5 +1,8 @@
 {% extends "base.html" %}
 {% block body %}
+<div id="body-box">
+<div id="meeting-box">
+<div>
 <p> Name: {{meetupName}} </p>
 <p> Preferences: {{preferences}}</p>
 <p> Owner: {{owner}}</p>
@@ -13,23 +16,26 @@
 <p> Date: {{date}}</p>
 <p> Location: {{location}} </p>
 <p> Comments: </p> 
+
+<div class="comment-container">
 {% for comment in comments %}
-    <p>{{comment.postBy}}</p>
-    <p>{{comment.date}}</p>
-    <p>{{comment.text}}</p>
+    <div class="comment">
+        <p>{{comment.postBy}}</p>
+        <p>{{comment.date}}</p>
+        <p>{{comment.text}}</p>
+    </div>
 {%else%} 
 <p> No Comment Available </p>
 {% endfor %}
+</div>
+<div id="meeting-buttons">
 <a href="/joinmeeting/{{meetupName}}">
     <button type="button" class="btn btn-dark"> Join </button>
 </a>
-<br>
 <form method = "post" action = "/leaveMeetup/{{meetId}}">
-    <br>
     <button type="submit" class="btn btn-dark"> Leave </button>
-    <br>
 </form>
-
+</div>
     
 {% if joinError %}
 <p class="alert alert-danger">You are already a part of this meetup.<p>
@@ -41,5 +47,7 @@
     <br>
     <button type="submit" class="btn btn-primary">Submit</button>
 </form>
+</div>
+</div>
 {% endblock %}
 

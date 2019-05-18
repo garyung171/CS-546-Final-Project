@@ -1,8 +1,9 @@
 {% extends "base.html" %}
 
 {% block body %}
-{% for item in meetups %}
+
 <div id="body-box">
+{% for item in meetups %}
     <div id="meetups-container">
     <br>
     <p>Name : {{item.meetupName}}</p>
@@ -14,8 +15,9 @@
     </a>
     <br>
     </div>
-</div>
 {% else %}
+
+</div>
 <div id="body-box">
 <p>No current meetups.</p>
 </div>
