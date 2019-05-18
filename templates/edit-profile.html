@@ -1,22 +1,28 @@
 {% extends "base.html" %}
 {% block body %}
 <form action="/updateName" method="post">
+    <label for="newName">New Username:</label>
     <input type="text" class="form-control" placeholder="Enter new username" name="newName">
     <button class="btn btn-primary" type="submit">Save</button>
 </form>
+
 <form action="/updatePassword" method="post">
+    <label for="newPassword">New Password:</label>
     <input type="text" class="form-control" placeholder="Enter new password" name="newPassword">
     <button class="btn btn-primary" type="submit">Save</button>
 </form>
 <form action="/updateLocation" method="post">
+    <label for="newLocation">New Location:</label>
     <input type="text" class="form-control" placeholder="Enter new location" name="newLocation">
     <button class="btn btn-primary" type="submit">Save</button>
 </form>
 <form action="/updateEmail" method="post">
+    <label for="newLocation">New Email:</label>
     <input type="text" class="form-control" placeholder="Enter new email" name="newEmail">
     <button class="btn btn-primary" type="submit">Save</button>
 </form>
-<form action="/updatePreferences" method="post">
+<form action="/updatePreferences" method="post" id="prefrences">
+    <p>Choose Prefrences</p>
     <input type="checkbox" name="preferences" id="dnd" value="DnD">
     <label for="dnd">Dungeons and Dragons</label>
     <br>
@@ -34,4 +40,7 @@
     <br>
     <button class="btn btn-primary" type="submit">Save</button>
 </form>
+{% endblock %}
+{% block scripts %}
+    <script src = "/public/js/profile-edit.js"></script>
 {% endblock %}

@@ -5,7 +5,17 @@ const path = require("path");
 const slugify = require("slugify");
 const userOperations = require("../mongodbAPI/userOperations");
 const saltRounds = 8;
-
+let checkArraysHaveSameItems = function(arr1,arr2){
+    if(arr1.length !== arr2.length){
+        return false;
+    }
+    for(let i = 0; i < arr1.length; ++i){
+        if(arr1[i] !== arr2[i]){
+            return false;
+        }
+    }
+    return true;
+}
 let checkLoginValidity = async function(username,password){
     if(!username || !password){
         return false;
@@ -115,6 +125,7 @@ router.get("/edit-profile/:profileAddress", async (req, res) => {
         let currentUser = await userOperations.getUserBySessionID(req.session.id);
         if (currentUser.profileAddress != req.params.profileAddress) {
             res.sendStatus(403);
+            return;
         }
         res.render("edit-profile",{
             title: "Edit Profile"
@@ -231,20 +242,20 @@ router.post("/updateEmail", async(req,res) => {
 
 router.post("/updatePreferences", async (req, res) => {
     try{
-        if(req.body.preferences == ""){
-            res.send("Please select some preferences");
+        if(req.body["prefrences"] === undefined){
+            res.send(false);
+            return;
         }else{
             let currentUser = await userOperations.getUserBySessionID(req.session.id);
-            let preferences = req.body.preferences;
-            console.log(preferences);
+            let preferences = (checkArraysHaveSameItems(req.body["prefrences"],[""])) ? [] : req.body["prefrences"];
             let update = await userOperations.updatePreferences(currentUser.username, preferences);
-            if(update){
-                // Ajax
-            }
+            res.send(update);
+            return;
         }
     }catch(e){
         console.log(e);
-        res.sendStatus(500);
+        res.send(false);
+        return;
     }
 })
 
@@ -257,6 +268,7 @@ router.get("/create-meeting", async(req,res) =>{
         res.sendStatus(500);
     }
 });
+
 
 router.post("/create-meeting", async (req,res) =>{
     if(!req.body.meetupName || !req.body.date || !req.body.location || new Date(req.body.date) < new Date()){
