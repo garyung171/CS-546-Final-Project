@@ -6,6 +6,7 @@ const slugify = require("slugify");
 const userOperations = require("../mongodbAPI/userOperations");
 const meetingsOperations = require("../mongodbAPI/meetingsOperations");
 const saltRounds = 8;
+const ObjectID = require("mongodb").ObjectID
 let checkArraysHaveSameItems = function(arr1,arr2){
     if(arr1.length !== arr2.length){
         return false;
@@ -279,12 +280,17 @@ router.post("/create-meeting", async (req,res) =>{
     try{
         req.session.createError = false;
         let owner = await userOperations.getUserBySessionID(req.session.id);
-        let meetingCreated = await createMeeting(
+        let meetingCreated = await meetingsOperations.createMeeting(
             req.body.meetupName,
             owner["_id"],
             new Date(req.body.date),
             req.body.location
         );
+        if(!meetingCreated){
+            req.session.createError = true;
+            res.redirect("/create-meeting");
+            return;
+        }
         res.redirect("/meeting/"+meetingCreated);
         return;
     }catch(e){
@@ -306,10 +312,14 @@ router.get("/relevantMeetups", async (req, res) => {
     }
 });
 
-router.get("/detailedView:meetId", async (req, res) => {
+router.get("/meeting/:meetId", async (req, res) => {
     try{
-        let meetId = req.params.meetId;
+        let meetId = ObjectID(req.params.meetId);
         let meetup = await meetingsOperations.getMeetingByMeetId(meetId);
+        if(meetup["empty"] === false){
+            res.redirect("/relevantMeetups");
+            return;
+        }
         let meetupName = meetup.meetupName;
         let owner = await userOperations.getUserById(meetup.owner)
         let ownerName = owner.username;

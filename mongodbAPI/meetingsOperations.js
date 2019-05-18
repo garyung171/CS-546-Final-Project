@@ -11,14 +11,10 @@ let createMeeting = async function(meetupName,owner,date,location){
     else{
         const meetings = await meetingsCollection();
         const users = await usersCollection();
-        const ownerID = await getUserByUsername(username)["_id"];
-        if(!ownerID){
-            return false;
-        }
         let meeting = {
                         meetupName:meetupName,
-                        owner:ownerID,
-                        attendees:[ownerID], 
+                        owner:owner,
+                        attendees:[owner], 
                         date:date,
                         location:location,
                         comments:[]
@@ -27,7 +23,7 @@ let createMeeting = async function(meetupName,owner,date,location){
         if(insertInfo.insertedCount === 0){
             throw "Unable to create user."
         }
-        return true;
+        return insertInfo.insertedId;
     }
 } 
 

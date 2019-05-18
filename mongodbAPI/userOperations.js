@@ -26,7 +26,7 @@ let getUserById = async function(id){
         id = ObjectID(id);
     }
     const users = await usersCollection();
-    const user = await users.find({"_id":id});
+    const user = await users.findOne({"_id":id});
     if(user === null){
         return {empty:true};
     }
@@ -195,7 +195,7 @@ let getRelevantMeetings = async function(username){
         let currentUser = await users.findOne({"username":username});
         let location = currentUser.location;
         let prefs = currentUser.preferences;
-        let found = await meetings.find({"location" : location, "preferences" : {$in : prefArray}});
+        let found = await meetings.find({"location" : location, "preferences" : {$in : prefs}});
         let compare = function(a, b) {
             if(a.preferences.length < b.preferences.length){
                 return 1;
