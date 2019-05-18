@@ -4,6 +4,7 @@ const bcrypt = require("bcrypt");
 const path = require("path");
 const slugify = require("slugify");
 const userOperations = require("../mongodbAPI/userOperations");
+const meetingsOperations = require("../mongodbAPI/meetingsOperations");
 const saltRounds = 8;
 let checkArraysHaveSameItems = function(arr1,arr2){
     if(arr1.length !== arr2.length){
@@ -302,5 +303,31 @@ router.get("/relevantMeetups", async (req, res) => {
         console.log(e);
         res.sendStatus(500);
     }
+});
+
+router.get("/detailedView:meetId", async (req, res) => {
+    try{
+        let meetId = req.params.meetId;
+        let meetup = await meetingsOperations.getMeetingByMeetId(meetId);
+        let meetupName = meetup.meetupName;
+        let owner = await userOperations.getUserById(meetup.owner)
+        let ownerName = owner.username;
+        let attendees = meetup.attendees;
+        let attendeesNames = [];
+        for(let i = 0; i<attendees.length; i++){
+            let user = await userOperations.getUserById(attendees[i]);
+            let username = user.username;
+            attendeesNames.push(username);
+        };
+        let date = meetup.date;
+        let location = meetup.location;
+        let comments = meetup.comments;
+        res.render("detail", {meetupName: meetupName, owner: ownerName, attendees: attendeesNames, date: date, location: location, comments: comments});
+        return;
+    }catch(e){
+        console.log(e);
+        res.sendStatus(500);
+    }
+
 })
 module.exports = router;

@@ -109,6 +109,19 @@ let getPreviousMeetings = async function(date){
     }
 }
 
+let getMeetingByMeetId = async function(meetId){
+    if(!meetId){
+        return false;
+    }else{
+        const meetings = await meetingsCollection();
+        let found = meetings.findOne({"_id" : meetId});
+        if (found === null){
+            return {"empty" : true};
+        }
+        return found;
+    }
+}
+
 module.exports = {
     createMeeting,
     getMeetingByUserId,
@@ -116,5 +129,6 @@ module.exports = {
     getMeetingByLocation,
     getMeetingByPreferences,
     getPreviousMeetings,
-    getFutureMeetings
+    getFutureMeetings,
+    getMeetingByMeetId
 }
