@@ -3,25 +3,41 @@ body{
 }
 .navbar-brand{
     font-family:'Roboto', sans-serif;
-    color:white;
-}
-.navbar-light .navbar-nav .nav-link {
-    color:white;
-}
-.navbar-default .navbar-nav > li {
-    color:white
-}
-.navbar-default .navbar-nav > li > a {
-    color:white;
-}
-.navbar-default .navbar-nav > li > a :hover{
-    color: #e6e6e6;
 }
 #body-box{
     display:flex;
     justify-content:space-around;
     flex-wrap:wrap;
 }
+#homeNav{
+    color:white;
+}
+#homeNav:hover{
+    color:#e6e6e6;
+}
+
+#findMeetups{
+    color:white;
+}
+#findMeetups:hover{
+    color:#e6e6e6;
+}
+#navbarDropdown{
+    color:white;
+}
+
+#navbarDropdown:hover{
+    color:#e6e6e6;
+}
+
+#logoutNav{
+    color:white;
+}
+
+#logoutNav:hover{
+    color:#e6e6e6;
+}
+
 .container{
     margin:5%;
     padding:2%;
@@ -41,6 +57,7 @@ body{
     height:500px;
     width:500px;
 }
+
 @media only screen and (max-width: 700px) {
     .container{
         width:100%;
