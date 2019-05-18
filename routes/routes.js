@@ -484,7 +484,7 @@ router.get("/search/", async(req,res) => {
             return meetArray;
         }
         let newMeetings = await revise(await allMatchedMeetings);
-        res.render("search-results",{title:"Search Results",meetings:newMeetings,loggedIn:req.session.loggedIn,userProfile:currentUser["profileAddress"]}); 
+        res.render("search-results",{title:"Search-Results",meetings:newMeetings,loggedIn:req.session.loggedIn,userProfile:currentUser["profileAddress"]}); 
     }catch(e){
         console.log(e);
         res.sendStatus(500);
