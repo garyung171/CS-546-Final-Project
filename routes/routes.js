@@ -172,10 +172,11 @@ router.post("/updateName", async(req, res) => {
         }else{
             let currentUser = await userOperations.getUserBySessionID(req.session.id);
             let newName = req.body.newName;
-            const usernameInDatabase = await userOperations.getUserByUsername(currentUser.username)["empty"] == false;
-            const profileAddressInDatabase = await userOperations.getUserByProfileAddress(slugify(currentUser.username))["empty"] == false;
-            if(usernameInDatabase||profileAddressInDatabase){
+            const usernameInDatabase = await userOperations.getUserByUsername(newName);
+            const profileAddressInDatabase = await userOperations.getUserByProfileAddress(slugify(newName));
+            if(usernameInDatabase.empty===undefined||profileAddressInDatabase.empty===undefined){
                 res.send(false);
+                return
             }
             let update = await userOperations.updateUsername(currentUser.username, newName);
             res.send(update);
