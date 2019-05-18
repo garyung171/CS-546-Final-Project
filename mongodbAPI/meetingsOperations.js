@@ -4,8 +4,8 @@ const connection = require("./establishConnection");
 const ObjectID = require("mongodb").ObjectID;
 const slugify = require("slugify");
 
-let createMeeting = async function(meetupName,owner,date,location){
-    if(!meetingsCollection || !owner || !date || !location){
+let createMeeting = async function(meetupName,owner,date,location, preferences){
+    if(!meetingsCollection || !owner || !date || !location || !preferences){
         return false;
     }
     else{
@@ -21,6 +21,7 @@ let createMeeting = async function(meetupName,owner,date,location){
                         attendees:[ownerID], 
                         date:date,
                         location:location,
+                        preferences: preferences,
                         comments:[]
                     } 
         const insertInfo = await meetings.insertOne(meeting);

@@ -242,12 +242,12 @@ router.post("/updateEmail", async(req,res) => {
 
 router.post("/updatePreferences", async (req, res) => {
     try{
-        if(req.body["prefrences"] === undefined){
+        if(req.body["preferences"] === undefined){
             res.send(false);
             return;
         }else{
             let currentUser = await userOperations.getUserBySessionID(req.session.id);
-            let preferences = (checkArraysHaveSameItems(req.body["prefrences"],[""])) ? [] : req.body["prefrences"];
+            let preferences = (checkArraysHaveSameItems(req.body["preferences"],[""])) ? [] : req.body["prefrences"];
             let update = await userOperations.updatePreferences(currentUser.username, preferences);
             res.send(update);
             return;
@@ -271,7 +271,7 @@ router.get("/create-meeting", async(req,res) =>{
 
 
 router.post("/create-meeting", async (req,res) =>{
-    if(!req.body.meetupName || !req.body.date || !req.body.location || new Date(req.body.date) < new Date()){
+    if(!req.body.meetupName || !req.body.date || !req.body.location || !req.body.preferences || new Date(req.body.date) < new Date()){
         req.session.createError = true;
         res.redirect("/create-meeting");
         return;
@@ -283,7 +283,8 @@ router.post("/create-meeting", async (req,res) =>{
             req.body.meetupName,
             owner["_id"],
             new Date(req.body.date),
-            req.body.location
+            req.body.location,
+            req.body.preferences
         );
         res.redirect("/meeting/"+meetingCreated);
         return;
@@ -329,7 +330,8 @@ router.get("/detailedView:meetId", async (req, res) => {
         let date = meetup.date;
         let location = meetup.location;
         let comments = meetup.comments;
-        res.render("detail", {meetupName: meetupName, owner: ownerName, attendees: attendeesNames, date: date, location: location, comments: comments});
+        let preferences = meetup.preferences;
+        res.render("detail", {meetupName: meetupName, owner: ownerName, attendees: attendeesNames, date: date, location: location, comments: comments, preferences: preferences});
         return;
     }catch(e){
         console.log(e);
